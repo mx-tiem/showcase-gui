@@ -60,7 +60,7 @@
                 placeholder="Type user name or email to search...">
               <mat-autocomplete #userAuto="matAutocomplete" (optionSelected)="selectUser($event.option.value)">
                 <mat-option *ngFor="let user of filteredUsers" [value]="user">
-                  {{ user.name }} ({{ user.email }})
+                  {{ user.name || user.username || user.email }}
                 </mat-option>
               </mat-autocomplete>
             </mat-form-field>

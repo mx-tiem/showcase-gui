@@ -173,8 +173,9 @@ export class Wizard implements OnInit {
     const selectedUserIds = this.selectedUsers.map(u => u.id);
     return this.users.filter(u => 
       !selectedUserIds.includes(u.id) &&
-      (u.name.toLowerCase().includes(searchTerm) || 
-       u.email.toLowerCase().includes(searchTerm))
+      ((u.name?.toLowerCase().includes(searchTerm) ?? false) || 
+       (u.email?.toLowerCase().includes(searchTerm) ?? false) ||
+       (u.username?.toLowerCase().includes(searchTerm) ?? false))
     ).slice(0, 10);
   }
 
