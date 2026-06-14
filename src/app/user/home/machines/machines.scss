@@ -1,0 +1,151 @@
+.machines-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 80%;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+}
+
+.machine-card {
+  min-height: 120px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 3px solid transparent;
+
+  &.working {
+    border-left-color: rgb(76, 175, 80);
+  }
+
+  &.available {
+    border-left-color: rgb(33, 150, 243);
+  }
+
+  &.maintenance {
+    border-left-color: rgb(255, 152, 0);
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  mat-card-content {
+    padding: 14px !important;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+.machine-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.type-icon {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.machine-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--mat-sys-on-surface);
+  flex: 1;
+}
+
+.status-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+
+  &.working {
+    color: rgb(76, 175, 80);
+  }
+
+  &.available {
+    color: rgb(33, 150, 243);
+  }
+
+  &.maintenance {
+    color: rgb(255, 152, 0);
+  }
+}
+
+.machine-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.game-logo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  padding: 4px 0;
+}
+
+.game-logo {
+  width: 80%;
+  max-width: 100px;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.game-details {
+  text-align: center;
+  width: 100%;
+}
+
+.game-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-name {
+  font-size: 11px;
+  color: var(--mat-sys-on-surface-variant);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-label {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.available {
+    color: rgb(33, 150, 243);
+  }
+
+  &.maintenance {
+    color: rgb(255, 152, 0);
+  }
+}

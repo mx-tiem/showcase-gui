@@ -1,0 +1,239 @@
+.calendar-container {
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--mat-sys-surface);
+}
+
+.calendar-back-row {
+  margin-bottom: 8px;
+
+  .back-button {
+    color: var(--mat-sys-on-surface-variant);
+
+    &:hover {
+      color: var(--mat-sys-on-surface);
+    }
+  }
+}
+
+.calendar-filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  mat-form-field {
+    min-width: 250px;
+    flex: 1;
+  }
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calendar-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--mat-sys-on-surface);
+}
+
+.calendar-content {
+  flex: 1;
+  overflow: auto;
+}
+
+// Dark theme overrides for angular-calendar
+:host ::ng-deep {
+  // All calendar events should have black text
+  .cal-event,
+  .cal-event-title {
+    color: black !important;
+    white-space: pre-line !important;
+  }
+  
+  // Month view
+  .cal-month-view {
+    background-color: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    
+    .cal-header {
+      .cal-cell {
+        color: var(--mat-sys-on-surface-variant);
+        font-weight: 500;
+      }
+    }
+    
+    .cal-days {
+      border-color: var(--mat-sys-outline-variant);
+      
+      .cal-cell-row {
+        border-color: var(--mat-sys-outline-variant);
+        
+        .cal-cell {
+          border-color: var(--mat-sys-outline-variant);
+          background-color: var(--mat-sys-surface);
+          color: var(--mat-sys-on-surface);
+          
+          &:hover {
+            background-color: var(--mat-sys-surface-container);
+          }
+          
+          &.cal-today {
+            background-color: rgba(30, 144, 255, 0.2);
+          }
+          
+          &.cal-out-month {
+            .cal-day-number {
+              color: var(--mat-sys-on-surface-variant);
+              opacity: 0.5;
+            }
+          }
+          
+          &.cal-weekend .cal-day-number {
+            color: rgba(255, 99, 71, 0.8);
+          }
+        }
+      }
+    }
+    
+    .cal-day-badge {
+      background-color: #1e90ff;
+      color: white;
+    }
+    
+    .cal-event {
+      background-color: #1e90ff;
+      border-color: #1e90ff;
+      color: white;
+    }
+  }
+  
+  // Week view
+  .cal-week-view {
+    background-color: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    
+    .cal-day-headers {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--mat-sys-surface);
+      border-color: var(--mat-sys-outline-variant);
+      
+      .cal-header {
+        border-color: var(--mat-sys-outline-variant);
+        background-color: var(--mat-sys-surface-variant);
+        
+        &.cal-today {
+          background-color: rgba(30, 144, 255, 0.2);
+        }
+        
+        &.cal-weekend span {
+          color: rgba(255, 99, 71, 0.8);
+        }
+      }
+    }
+    
+    .cal-time-label-column {
+      border-color: var(--mat-sys-outline-variant);
+    }
+    
+    .cal-day-column {
+      border-color: var(--mat-sys-outline-variant);
+    }
+    
+    .cal-hour {
+      background-color: var(--mat-sys-surface);
+      
+      &:not(:last-child) .cal-hour-segment {
+        border-bottom: thin dashed var(--mat-sys-outline-variant);
+      }
+    }
+    
+    .cal-hour-segment {
+      &:hover {
+        background-color: var(--mat-sys-surface-container);
+      }
+    }
+    
+    .cal-event {
+      background-color: #1e90ff;
+      border-color: #1e90ff;
+      color: white;
+    }
+    
+    .cal-time {
+      color: var(--mat-sys-on-surface-variant);
+      font-weight: normal;
+    }
+  }
+  
+  // Day view
+  .cal-day-view {
+    background-color: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    
+    .cal-hour-rows {
+      border-color: var(--mat-sys-outline-variant);
+    }
+    
+    .cal-hour {
+      &:not(:last-child) .cal-hour-segment {
+        border-bottom: thin dashed var(--mat-sys-outline-variant);
+      }
+    }
+    
+    .cal-hour-segment {
+      background-color: var(--mat-sys-surface);
+      
+      &:hover {
+        background-color: var(--mat-sys-surface-container);
+      }
+    }
+    
+    .cal-event {
+      background-color: #1e90ff;
+      border-color: #1e90ff;
+      color: white;
+      
+      &.clickable-event {
+        cursor: pointer;
+        
+        &:hover {
+          opacity: 0.9;
+          transform: scale(1.02);
+          transition: all 0.2s ease;
+        }
+      }
+    }
+    
+    .cal-time {
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
+  
+  // All views - drag and drop
+  .cal-drag-active {
+    background-color: rgba(30, 144, 255, 0.1) !important;
+  }
+}

@@ -1,0 +1,115 @@
+<div class="cancel-dialog-container">
+  <h2 mat-dialog-title>Cancel Reservation</h2>
+  <mat-dialog-content>
+    <!-- Start Time, End Time, and Status in same row -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <strong>Start Time:</strong> {{ formatDateTime(reservation.start_time) }}
+      </div>
+      <div class="col-md-4">
+        <strong>End Time:</strong> {{ formatDateTime(reservation.end_time) }}
+      </div>
+      <div class="col-md-4">
+        <strong>Status:</strong>
+        <span class="status-badge" [ngClass]="'status-' + reservation.status.toLowerCase()">{{ reservation.status }}</span>
+      </div>
+    </div>
+
+    <!-- Cards Row -->
+    <div class="row mb-3">
+      <!-- User Card -->
+      <div class="col-md-4 mb-3">
+        <h5>User</h5>
+        <mat-card class="user-info-card">
+          <mat-card-content>
+            <div class="user-name">{{ reservation.user.name }}</div>
+            <div class="user-email">{{ reservation.user.email }}</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Machine Card -->
+      <div class="col-md-4 mb-3">
+        <h5>Machine</h5>
+        <mat-card class="machine-info-card">
+          <mat-card-content>
+            <div class="machine-name">{{ reservation.machine.name }}</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Creator Card -->
+      <div class="col-md-4 mb-3">
+        <h5>Creator</h5>
+        <mat-card class="creator-info-card">
+          <mat-card-content>
+            <div class="creator-name">{{ reservation.creator.name }}</div>
+            <div class="creator-email">{{ reservation.creator.email }}</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- User Refund Info Accordion -->
+    <mat-accordion class="mb-3">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon class="me-2">info</mat-icon>
+            User Cancellation Policy Info
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="policy-info">
+          <p><strong>Free cancellation window:</strong> {{ freeCancellationHours }} hours before start</p>
+          <p><strong>Time until start:</strong> {{ hoursUntilStart }} hours</p>
+          <p><strong>Reservation duration:</strong> {{ durationHours }} hours</p>
+
+          <div class="refund-card" [class.refund]="userWouldGetRefund" [class.no-refund]="!userWouldGetRefund">
+            <mat-icon>{{ userWouldGetRefund ? 'check_circle' : 'block' }}</mat-icon>
+            <span *ngIf="userWouldGetRefund">If the <strong>user</strong> cancelled, <strong>{{ durationHours }}</strong> hour{{ durationHours !== 1 ? 's' : '' }} would be refunded</span>
+            <span *ngIf="!userWouldGetRefund">If the <strong>user</strong> cancelled, <strong>NO</strong> hours would be refunded</span>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <!-- Admin Override Toggle -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="refund-switch-container">
+          <h5>Admin Refund Override</h5>
+          <mat-slide-toggle
+            [(ngModel)]="refundEnabled"
+            class="refund-toggle">
+            {{ refundEnabled ? 'Refund playhours' : 'No refund' }}
+          </mat-slide-toggle>
+          <p class="refund-description">
+            {{ refundEnabled ? durationHours + ' hours will be refunded to ' + reservation.creator.name : 'No refund will be given' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Refund Result Card -->
+    <div class="refund-result-card" [class.refund]="refundEnabled" [class.no-refund]="!refundEnabled">
+      <mat-icon>{{ refundEnabled ? 'check_circle' : 'block' }}</mat-icon>
+      <span *ngIf="refundEnabled"><strong>{{ durationHours }}</strong> hour{{ durationHours !== 1 ? 's' : '' }} will be refunded</span>
+      <span *ngIf="!refundEnabled"><strong>NO</strong> hours will be refunded</span>
+    </div>
+
+    <!-- Cancel Button -->
+    <div class="row mt-3">
+      <div class="col-12 text-center">
+        <button
+          mat-raised-button
+          color="warn"
+          class="big-cancel-button"
+          (click)="onConfirmCancel()">
+          <mat-icon>cancel</mat-icon>
+          Confirm Cancel Reservation
+        </button>
+      </div>
+    </div>
+  </mat-dialog-content>
+</div>

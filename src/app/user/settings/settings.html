@@ -1,0 +1,133 @@
+<div class="settings-container">
+  <h2 class="settings-title">
+    <mat-icon class="title-icon">settings</mat-icon>
+    {{ 'user.settings.title' | transloco }}
+  </h2>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>{{ 'user.settings.loading' | transloco }}</p>
+  </div>
+
+  <div class="settings-content" *ngIf="!isLoading">
+    <!-- Error Messages -->
+    <div class="error-banner" *ngIf="errors.length > 0">
+      <mat-icon>error</mat-icon>
+      <div class="error-messages">
+        <span *ngFor="let error of errors">{{ error }}</span>
+      </div>
+    </div>
+
+    <!-- Profile Section -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="section-icon">person</mat-icon>
+        <mat-card-title>{{ 'user.settings.profileInfo' | transloco }}</mat-card-title>
+        <mat-card-subtitle>{{ 'user.settings.updateDetails' | transloco }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'user.settings.name' | transloco }}</mat-label>
+            <input matInput [(ngModel)]="name" [placeholder]="'user.settings.namePlaceholder' | transloco">
+            <mat-icon matPrefix>badge</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'user.settings.username' | transloco }}</mat-label>
+            <input matInput [(ngModel)]="username" [placeholder]="'user.settings.usernamePlaceholder' | transloco">
+            <mat-icon matPrefix>alternate_email</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>{{ 'user.settings.email' | transloco }}</mat-label>
+            <input matInput [(ngModel)]="email" placeholder="your@email.com" type="email">
+            <mat-icon matPrefix>email</mat-icon>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Password Section -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="section-icon">lock</mat-icon>
+        <mat-card-title>{{ 'user.settings.changePassword' | transloco }}</mat-card-title>
+        <mat-card-subtitle>{{ 'user.settings.leaveBlank' | transloco }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>{{ 'user.settings.currentPassword' | transloco }}</mat-label>
+            <input matInput [(ngModel)]="currentPassword" type="password" [placeholder]="'user.settings.enterCurrentPassword' | transloco">
+            <mat-icon matPrefix>key</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'user.settings.newPassword' | transloco }}</mat-label>
+            <input matInput [(ngModel)]="newPassword" type="password" [placeholder]="'user.settings.enterNewPassword' | transloco">
+            <mat-icon matPrefix>lock_reset</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'user.settings.confirmPassword' | transloco }}</mat-label>
+            <input matInput [(ngModel)]="passwordConfirmation" type="password" [placeholder]="'user.settings.confirmNewPassword' | transloco">
+            <mat-icon matPrefix>lock</mat-icon>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Language Section -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="section-icon">language</mat-icon>
+        <mat-card-title>{{ 'user.settings.language' | transloco }}</mat-card-title>
+        <mat-card-subtitle>{{ 'user.settings.languageDesc' | transloco }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>{{ 'user.settings.language' | transloco }}</mat-label>
+          <mat-select [value]="currentLang" (selectionChange)="onLanguageChange($event.value)">
+            <mat-option *ngFor="let lang of availableLanguages" [value]="lang.code">
+              {{ lang.label }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matPrefix>translate</mat-icon>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Appearance Section -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="section-icon">palette</mat-icon>
+        <mat-card-title>{{ 'user.settings.appearance' | transloco }}</mat-card-title>
+        <mat-card-subtitle>{{ 'user.settings.appearanceDesc' | transloco }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="theme-toggle-group">
+          <mat-button-toggle-group [value]="currentTheme" (change)="onThemeChange($event.value)" class="theme-toggle">
+            <mat-button-toggle value="dojo">
+              <mat-icon>light_mode</mat-icon>
+              <span class="toggle-label">{{ 'user.settings.lightTheme' | transloco }}</span>
+            </mat-button-toggle>
+            <mat-button-toggle value="dojo-dark">
+              <mat-icon>dark_mode</mat-icon>
+              <span class="toggle-label">{{ 'user.settings.darkTheme' | transloco }}</span>
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Actions -->
+    <div class="actions-row">
+      <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!canSave">
+        <mat-icon>{{ isSaving ? 'hourglass_empty' : 'save' }}</mat-icon>
+        {{ isSaving ? ('user.settings.saving' | transloco) : ('user.settings.saveChanges' | transloco) }}
+      </button>
+    </div>
+  </div>
+</div>

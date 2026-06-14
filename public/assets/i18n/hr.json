@@ -1,0 +1,442 @@
+{
+  "common": {
+    "back": "Natrag",
+    "cancel": "Otkaži",
+    "id": "ID",
+    "reset": "Resetiraj",
+    "retry": "Pokušaj ponovo",
+    "select": "Odaberi"
+  },
+  "login": {
+    "emailOrUsername": "Email ili korisničko ime",
+    "emailPlaceholder": "Unesite email ili korisničko ime",
+    "emailRequired": "Email ili korisničko ime je obavezno",
+    "minLength": "Mora imati najmanje 3 znaka",
+    "password": "Lozinka",
+    "passwordMinLength": "Lozinka mora imati najmanje 3 znaka",
+    "passwordPlaceholder": "Unesite lozinku",
+    "passwordRequired": "Lozinka je obavezna",
+    "submit": "Prijava",
+    "title": "Prijava"
+  },
+  "nav": {
+    "about": "O nama",
+    "account": "Račun",
+    "admin": "Admin",
+    "appSettings": "Postavke aplikacije",
+    "calendar": "Kalendar",
+    "contact": "Kontakt",
+    "dashboard": "Nadzorna ploča",
+    "events": "Događaji",
+    "friends": "Prijatelji",
+    "home": "Početna",
+    "hours": "Sati",
+    "machines": "Računala",
+    "notifications": "Obavijesti",
+    "reservations": "Rezervacije",
+    "settings": "Postavke",
+    "users": "Korisnici"
+  },
+  "toolbar": {
+    "logout": "Odjava",
+    "noNotifications": "Nema obavijesti",
+    "notifications": "Obavijesti",
+    "settings": "Postavke",
+    "title": "e-Dojo",
+    "viewAll": "Pogledaj sve obavijesti"
+  },
+  "admin": {
+    "backToDashboard": "Natrag na nadzornu ploču",
+    "appSettings": {
+      "discount": {
+        "hoursRequired": "Potrebni sati za maksimalni popust",
+        "hoursRequiredHint": "Ukupno sati igranja potrebno za maksimalni popust",
+        "maxDiscount": "Maksimalni popust za igranje (%)",
+        "maxDiscountHint": "Maksimalni postotak popusta koji korisnik može zaraditi igranjem",
+        "subtitle": "Konfigurirajte sustav popusta za igranje",
+        "title": "Postavke popusta"
+      },
+      "reservationRules": {
+        "freeCancellation": "Besplatno otkazivanje (sati)",
+        "freeCancellationHint": "Sati prije početka kada je dopušteno besplatno otkazivanje",
+        "lateTolerance": "Tolerancija kašnjenja (minute)",
+        "lateToleranceHint": "Minute nakon početka rezervacije prije automatskog otkazivanja ako se korisnik nije prijavio",
+        "minHours": "Min sati prije rezervacije",
+        "minHoursHint": "Minimalan broj sati unaprijed za rezervaciju",
+        "subtitle": "Konfigurirajte pravila rezervacija",
+        "title": "Pravila rezervacija"
+      },
+      "resetDefaults": "Vrati na zadano",
+      "saveSettings": "Spremi postavke",
+      "saving": "Spremanje...",
+      "title": "Postavke aplikacije",
+      "warden": {
+        "secret": "Dojo Warden tajna",
+        "secretHint": "Ova tajna mora odgovarati onoj konfiguriranoj u Warden aplikaciji za API autentikaciju",
+        "secretPlaceholder": "Unesite dojo warden tajnu",
+        "subtitle": "Konfigurirajte dijeljenu tajnu za autentikaciju Warden zahtjeva prema Rails API-ju",
+        "title": "Warden integracija"
+      },
+      "workingDays": {
+        "subtitle": "Odaberite dane kada je objekt otvoren",
+        "title": "Radni dani"
+      },
+      "workingHours": {
+        "closing": "Zatvaranje",
+        "opening": "Otvaranje",
+        "subtitle": "Postavite radno vrijeme objekta",
+        "title": "Radno vrijeme"
+      }
+    },
+    "calendar": {
+      "allMachines": "Sva računala",
+      "clearFilters": "Očisti filtre",
+      "day": "Dan",
+      "filterMachine": "Filtriraj po računalu",
+      "month": "Mjesec",
+      "searchPlaceholder": "Unesite ime ili email korisnika...",
+      "searchUser": "Pretraži korisnika",
+      "today": "Danas",
+      "week": "Tjedan"
+    },
+    "dashboard": {
+      "appSettings": "Postavke aplikacije",
+      "calendar": "Kalendar",
+      "games": "Igre",
+      "machines": "Računala",
+      "notifications": "Obavijesti",
+      "prices": "Cjenik",
+      "reservations": "Rezervacije",
+      "transactions": "Transakcije",
+      "users": "Korisnici"
+    },
+    "dialog": {
+      "cancel": "Odustani",
+      "chooseFile": "Odaberi datoteku",
+      "close": "Zatvori",
+      "create": "Kreiraj",
+      "date": "Datum",
+      "noLogo": "Logo nije učitan",
+      "save": "Spremi",
+      "time": "Vrijeme"
+    },
+    "games": {
+      "title": "Igre",
+      "columns": {
+        "actions": "Akcije",
+        "controller": "Kontroler",
+        "coop": "Co-op",
+        "genre": "Žanr",
+        "id": "ID",
+        "identifier": "Identifikator",
+        "multiplayer": "Multiplayer",
+        "name": "Naziv",
+        "platform": "Platforma"
+      }
+    },
+    "hourTransactions": {
+      "title": "Transakcije sati",
+      "columns": {
+        "date": "Datum",
+        "hours": "Sati",
+        "id": "ID",
+        "notice": "Napomena",
+        "receiver": "Primatelj",
+        "sender": "Pošiljatelj",
+        "type": "Tip"
+      }
+    },
+    "machines": {
+      "title": "Računala",
+      "columns": {
+        "actions": "Akcije",
+        "hardware": "Konfiguracija hardvera",
+        "id": "ID",
+        "name": "Naziv računala",
+        "status": "Status",
+        "type": "Tip"
+      }
+    },
+    "machineView": {
+      "activeReservation": "Aktivna rezervacija",
+      "activeSession": "Aktivna sesija",
+      "activeSessionDesc": "Korisnik je trenutno prijavljen.",
+      "callbackPort": "Callback port",
+      "callbackSecret": "Callback tajna",
+      "commands": "Naredbe",
+      "emailLabel": "Email",
+      "endTime": "Završetak",
+      "fetchingStatus": "Dohvaćanje statusa wardena...",
+      "globalIp": "Globalna IP adresa",
+      "hardwareConfig": "Konfiguracija hardvera",
+      "infoTab": "Info",
+      "localIp": "Lokalna IP adresa",
+      "loggedInUser": "Prijavljeni korisnik",
+      "name": "Naziv",
+      "noActiveReservation": "Nema aktivne rezervacije.",
+      "ready": "Spreman",
+      "readyDesc": "Računalo je uključeno. Nitko nije prijavljen.",
+      "reservation": "Rezervacija",
+      "reservationId": "ID rezervacije",
+      "roleLabel": "Uloga",
+      "startTime": "Početak",
+      "status": "Status",
+      "statusLabel": "Status",
+      "statusTab": "Status",
+      "type": "Tip",
+      "username": "Korisničko ime",
+      "wardenDetails": "Warden detalji",
+      "wardenNotConnected": "Warden nije povezan",
+      "wardenNotConnectedDesc": "Ovo računalo nema konfigurirane podatke za Warden povezivanje. Uredite računalo za postavljanje Warden IP adrese i porta.",
+      "wardenOffline": "Warden offline",
+      "workingDays": "Radni dani",
+      "workingHours": "Radno vrijeme"
+    },
+    "notifications": {
+      "title": "Obavijesti",
+      "columns": {
+        "createdAt": "Kreirano",
+        "description": "Opis",
+        "icon": "Ikona",
+        "id": "ID",
+        "status": "Status",
+        "title": "Naslov",
+        "user": "Korisnik"
+      }
+    },
+    "prices": {
+      "title": "Cjenik",
+      "columns": {
+        "actions": "Akcije",
+        "active": "Aktivno",
+        "avg": "Prosj.",
+        "hours": "Sati",
+        "id": "ID",
+        "name": "Naziv",
+        "order": "Redoslijed",
+        "price": "Cijena",
+        "type": "Tip"
+      }
+    },
+    "reservations": {
+      "title": "Rezervacije",
+      "columns": {
+        "actions": "Akcije",
+        "endTime": "Završetak",
+        "id": "ID",
+        "machine": "Računalo",
+        "startTime": "Početak",
+        "status": "Status",
+        "user": "Korisnik"
+      }
+    },
+    "table": {
+      "createNew": "Kreiraj novo",
+      "noData": "Nema dostupnih podataka"
+    },
+    "userGames": {
+      "duration": "Trajanje",
+      "end": "Kraj",
+      "game": "Igra",
+      "genre": "Žanr",
+      "loading": "Učitavanje igara...",
+      "machine": "Računalo",
+      "noGamePlays": "Nema pronađenih igranja",
+      "session": "sesija",
+      "sessions": "sesija",
+      "start": "Početak"
+    },
+    "userHours": {
+      "active": "Aktivno",
+      "addHours": "Dodaj sate",
+      "adding": "Dodavanje...",
+      "adminDiscount": "Admin popust",
+      "amount": "Količina",
+      "created": "Kreirano",
+      "discountPercent": "Popust %",
+      "expirationDate": "Datum isteka",
+      "expires": "Ističe",
+      "forPlayedHours": "za {{hours}} odigranih sati prošli mjesec",
+      "hoursAmount": "Količina sati",
+      "hoursExpire": "Sati istječu",
+      "hoursType": "Tip sati",
+      "manuallySet": "Ručno postavljeno od admina",
+      "noPlayhours": "Nema pronađenih zapisa o satima.",
+      "playDiscount": "Popust za igranje",
+      "playHours": "Sati za igranje",
+      "statusCol": "Status",
+      "used": "Iskorišteno"
+    },
+    "userNotifications": {
+      "createdAt": "Kreirano",
+      "description": "Opis",
+      "icon": "Ikona",
+      "loading": "Učitavanje obavijesti...",
+      "noNotifications": "Nema pronađenih obavijesti za ovog korisnika.",
+      "status": "Status",
+      "titleCol": "Naslov"
+    },
+    "userReservations": {
+      "duration": "Trajanje",
+      "endTime": "Završetak",
+      "loading": "Učitavanje rezervacija...",
+      "machine": "Računalo",
+      "noReservations": "Nema pronađenih rezervacija za ovog korisnika.",
+      "startTime": "Početak",
+      "status": "Status"
+    },
+    "users": {
+      "title": "Korisnici",
+      "columns": {
+        "actions": "Akcije",
+        "email": "Email",
+        "id": "ID",
+        "name": "Ime",
+        "playHours": "Sati igranja",
+        "role": "Uloga"
+      }
+    },
+    "userView": {
+      "createdAt": "Kreirano",
+      "email": "Email",
+      "lastUpdated": "Zadnje ažurirano",
+      "loading": "Učitavanje korisničkih podataka...",
+      "role": "Uloga",
+      "status": "Status",
+      "tabs": {
+        "games": "Igre",
+        "hours": "Sati",
+        "notifications": "Obavijesti",
+        "reservations": "Rezervacije"
+      }
+    }
+  },
+  "user": {
+    "events": {
+      "underConstruction": "U izradi"
+    },
+    "friends": {
+      "loadingMore": "Učitavanje više rezultata...",
+      "myFriends": "Moji prijatelji",
+      "noFriends": "Još nemate prijatelja. Pretražite korisnike iznad da dodate prijatelje!",
+      "noMoreResults": "Nema više rezultata",
+      "noUsersFound": "Nije pronađen korisnik za",
+      "remaining": "preostalo",
+      "searchingUsers": "Pretraživanje korisnika...",
+      "searchPlaceholder": "Unesite ime ili email",
+      "searchResults": "Rezultati pretrage",
+      "searchUsers": "Pretraži korisnike",
+      "showMore": "Prikaži više"
+    },
+    "home": {
+      "activeReservations": "Aktivne rezervacije",
+      "extend": "Produlji",
+      "loadingReservations": "Učitavanje rezervacija...",
+      "newReservation": "Nova rezervacija",
+      "play": "Igraj!",
+      "playHours": "Sati za igranje",
+      "youHave": "Imaš",
+      "playhours": "sati igranja"
+    },
+    "hours": {
+      "admin": "Admin",
+      "buyHours": "Kupi sate",
+      "discountBanner": "Imate <strong>{{discount}}%</strong> popusta na sve cijene!",
+      "hours": "sati",
+      "loadingPrices": "Učitavanje cijena...",
+      "myGames": "Moje igre",
+      "noPrices": "Trenutno nema dostupnih paketa cijena.",
+      "play": "Igranje",
+      "session": "sesija",
+      "sessions": "sesija",
+      "totalReservations": "Ukupno rezervacija"
+    },
+    "notifications": {
+      "empty": "Još nema obavijesti",
+      "loading": "Učitavanje obavijesti...",
+      "loadingMore": "Učitavanje više...",
+      "loadMore": "Učitaj više",
+      "markAllRead": "Označi sve kao pročitano",
+      "title": "Obavijesti"
+    },
+    "reservations": {
+      "actions": "Akcije",
+      "createdBy": "Kreirao/la",
+      "dateTime": "Datum i vrijeme",
+      "duration": "Trajanje",
+      "loadingReservations": "Učitavanje rezervacija...",
+      "machine": "Računalo",
+      "myReservations": "Moje rezervacije",
+      "newReservation": "Nova rezervacija",
+      "noReservations": "Nema pronađenih rezervacija",
+      "noReservationsDesc": "Još niste napravili nijednu rezervaciju.",
+      "status": "Status",
+      "viewAll": "Pogledaj sve rezervacije",
+      "youHave": "Imaš",
+      "playhours": "sati igranja"
+    },
+    "settings": {
+      "changePassword": "Promjena lozinke",
+      "confirmNewPassword": "Potvrdite novu lozinku",
+      "confirmPassword": "Potvrda nove lozinke",
+      "currentPassword": "Trenutna lozinka",
+      "email": "Email",
+      "enterCurrentPassword": "Unesite trenutnu lozinku",
+      "enterNewPassword": "Unesite novu lozinku",
+      "language": "Jezik",
+      "languageDesc": "Odaberite željeni jezik",
+      "leaveBlank": "Ostavite prazno za zadržavanje trenutne lozinke",
+      "loading": "Učitavanje postavki...",
+      "name": "Ime",
+      "namePlaceholder": "Vaše puno ime",
+      "newPassword": "Nova lozinka",
+      "profileInfo": "Osobni podaci",
+      "saveChanges": "Spremi promjene",
+      "saving": "Spremanje...",
+      "title": "Postavke računa",
+      "updateDetails": "Ažurirajte svoje osobne podatke",
+      "username": "Korisničko ime",
+      "usernamePlaceholder": "Vaše korisničko ime",
+      "appearance": "Izgled",
+      "appearanceDesc": "Odaberite željenu temu",
+      "lightTheme": "Svijetla",
+      "darkTheme": "Tamna"
+    },
+    "wizard": {
+      "availableFriends": "Dostupni prijatelji",
+      "availableHours": "Dostupni sati",
+      "availableSlots": "dostupnih termina",
+      "basicInfo": "Raspored",
+      "checking": "Provjera...",
+      "confirmation": "Potvrda",
+      "confirmDate": "Datum",
+      "confirmTime": "Vrijeme",
+      "confirmCost": "Cijena",
+      "confirmPlayer": "Igrač",
+      "confirmMachine": "Računalo",
+      "createReservation": "Kreiraj rezervaciju",
+      "duration": "Trajanje",
+      "endTime": "Kraj",
+      "filterFriends": "Upišite za filtriranje prijatelja...",
+      "insufficientHours": "Nedovoljno sati",
+      "insufficientHoursDetail": "Nedovoljno sati igranja. Potrebno: {{required}}, Dostupno: {{available}}",
+      "maxUsersReached": "Maksimalno {{max}} korisnika (ograničeno brojem dostupnih računala).",
+      "next": "Dalje",
+      "noFriendsAvailable": "Svi vaši prijatelji su već odabrani ili još nemate prijatelja.",
+      "noTimeSlots": "Nema dostupnih termina.",
+      "reviewDetails": "Pregledajte detalje rezervacije prije slanja.",
+      "searchFriends": "Pretraži prijatelje",
+      "selectDate": "Odaberite datum",
+      "selectedUsers": "Odabrani korisnici",
+      "selectFriendsForReservation": "Odaberite prijatelje za rezervaciju",
+      "selectSlotInstruction": "Odaberite dostupan termin i računalo za vašu rezervaciju.",
+      "selectTimeSlot": "Odabir termina",
+      "selectUsers": "Odaberite sebe i/ili prijatelje za rezervaciju.",
+      "sessionType": "Solo ili prijatelji",
+      "soloSession": "Solo",
+      "startDate": "Datum početka",
+      "startTime": "Početak",
+      "withFriends": "S prijateljima"
+    }
+  }
+}

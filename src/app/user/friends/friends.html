@@ -1,0 +1,99 @@
+<div class="friends-container">
+  <!-- Search Section -->
+  <div class="search-section">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>{{ 'user.friends.searchUsers' | transloco }}</mat-label>
+      <input matInput
+             [(ngModel)]="searchQuery"
+             (input)="onSearchInput()"
+             [placeholder]="'user.friends.searchPlaceholder' | transloco">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <!-- Search Results Section -->
+  <div class="search-results" *ngIf="showSearchResults || isSearching || searchError">
+    <h3>{{ 'user.friends.searchResults' | transloco }}</h3>
+    
+    <!-- Loading State -->
+    <div *ngIf="isSearching" class="loading-state">
+      <mat-icon class="loading-icon">search</mat-icon>
+      <p>{{ 'user.friends.searchingUsers' | transloco }}</p>
+    </div>
+    
+    <!-- Error State -->
+    <div *ngIf="searchError && !isSearching" class="error-state">
+      <mat-icon class="error-icon">error</mat-icon>
+      <p>{{ searchError }}</p>
+    </div>
+    
+    <!-- Results -->
+    <div class="results-grid" *ngIf="!isSearching && !searchError && searchResults.length > 0">
+      <mat-card class="result-card" *ngFor="let user of searchResults">
+        <mat-card-content class="result-content d-flex align-items-center justify-content-between flex-nowrap">
+          <div class="user-info">
+            <div class="user-details">
+              <div class="name">{{ user.name }}</div>
+              <div class="email">{{ user.email }}</div>
+            </div>
+          </div>
+          <button mat-icon-button color="primary" (click)="addFriend(user)">
+            <mat-icon>add</mat-icon>
+          </button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Show More Button -->
+    <div class="pagination-section" *ngIf="!isSearching && !searchError && searchResults.length > 0">
+      <div *ngIf="isLoadingMore" class="loading-more">
+        <mat-icon class="loading-icon">refresh</mat-icon>
+        <span>{{ 'user.friends.loadingMore' | transloco }}</span>
+      </div>
+      <button 
+        *ngIf="!isLoadingMore && hasMoreResults" 
+        mat-stroked-button 
+        color="primary" 
+        (click)="loadMoreResults()"
+        class="show-more-btn">
+        <mat-icon>expand_more</mat-icon>
+        {{ 'user.friends.showMore' | transloco }} ({{ totalResults - searchResults.length }} {{ 'user.friends.remaining' | transloco }})
+      </button>
+      <p *ngIf="!isLoadingMore && !hasMoreResults && searchResults.length > 0" class="no-more-results">
+        {{ 'user.friends.noMoreResults' | transloco }}
+      </p>
+    </div>
+
+    <!-- No Results -->
+    <div *ngIf="!isSearching && !searchError && searchResults.length === 0 && currentSearchQuery" class="no-results">
+      <p>{{ 'user.friends.noUsersFound' | transloco }} "{{ currentSearchQuery }}"</p>
+    </div>
+  </div>
+
+  <!-- Friends Section -->
+  <div class="friends-section">
+    <h3>{{ 'user.friends.myFriends' | transloco }} ({{ friends.length }})</h3>
+    <div class="friends-grid" *ngIf="friends.length > 0; else noFriends">
+      <mat-card class="friend-card" *ngFor="let friend of friends">
+        <mat-card-content class="friend-content">
+          <div class="friend-details">
+            <div class="name-row">
+              <div class="status-indicator" [style.background-color]="getStatusColor(friend.status)"></div>
+              <div class="name">{{ friend.name }}</div>
+            </div>
+            <div class="email">{{ friend.email }}</div>
+          </div>
+          <button mat-icon-button color="warn" (click)="removeFriend(friend)">
+            <mat-icon>remove</mat-icon>
+          </button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <ng-template #noFriends>
+      <div class="no-friends">
+        <mat-icon class="no-friends-icon">people_outline</mat-icon>
+        <p>{{ 'user.friends.noFriends' | transloco }}</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

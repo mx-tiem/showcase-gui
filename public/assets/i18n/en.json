@@ -1,0 +1,442 @@
+{
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "id": "ID",
+    "reset": "Reset",
+    "retry": "Retry",
+    "select": "Select"
+  },
+  "login": {
+    "emailOrUsername": "Email or Username",
+    "emailPlaceholder": "Enter your email or username",
+    "emailRequired": "Email or username is required",
+    "minLength": "Must be at least 3 characters",
+    "password": "Password",
+    "passwordMinLength": "Password must be at least 3 characters",
+    "passwordPlaceholder": "Enter your password",
+    "passwordRequired": "Password is required",
+    "submit": "Login",
+    "title": "Sign In"
+  },
+  "nav": {
+    "about": "About",
+    "account": "Account",
+    "admin": "Admin",
+    "appSettings": "App Settings",
+    "calendar": "Calendar",
+    "contact": "Contact",
+    "dashboard": "Dashboard",
+    "events": "Events",
+    "friends": "Friends",
+    "home": "Home",
+    "hours": "Hours",
+    "machines": "Machines",
+    "notifications": "Notifications",
+    "reservations": "Reservations",
+    "settings": "Settings",
+    "users": "Users"
+  },
+  "toolbar": {
+    "logout": "Log out",
+    "noNotifications": "No notifications",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "title": "e-Dojo",
+    "viewAll": "View all notifications"
+  },
+  "admin": {
+    "backToDashboard": "Back to Dashboard",
+    "appSettings": {
+      "discount": {
+        "hoursRequired": "Hours Required for Max Discount",
+        "hoursRequiredHint": "Total hours a user must play to earn the maximum discount",
+        "maxDiscount": "Max Play Discount (%)",
+        "maxDiscountHint": "Maximum discount percentage a user can earn through play",
+        "subtitle": "Configure the play discount system for users",
+        "title": "Discount Settings"
+      },
+      "reservationRules": {
+        "freeCancellation": "Free Cancellation Window (hours)",
+        "freeCancellationHint": "Hours before start time when free cancellation is allowed",
+        "lateTolerance": "Start Late Tolerance (minutes)",
+        "lateToleranceHint": "Minutes after reservation start before it's auto-cancelled if user hasn't logged in",
+        "minHours": "Min Hours Before Reservation",
+        "minHoursHint": "Minimum hours in advance a reservation must be made",
+        "subtitle": "Configure reservation policies",
+        "title": "Reservation Rules"
+      },
+      "resetDefaults": "Reset to Defaults",
+      "saveSettings": "Save Settings",
+      "saving": "Saving...",
+      "title": "App Settings",
+      "warden": {
+        "secret": "Dojo Warden Secret",
+        "secretHint": "This secret must match the one configured in the Warden app for API authentication",
+        "secretPlaceholder": "Enter dojo warden secret",
+        "subtitle": "Configure the shared secret used to authenticate Warden app requests to the Rails API",
+        "title": "Warden Integration"
+      },
+      "workingDays": {
+        "subtitle": "Select the days the venue is open",
+        "title": "Working Days"
+      },
+      "workingHours": {
+        "closing": "Closing Hours",
+        "opening": "Opening Hours",
+        "subtitle": "Set the opening and closing hours for the venue",
+        "title": "Working Hours"
+      }
+    },
+    "calendar": {
+      "allMachines": "All Machines",
+      "clearFilters": "Clear Filters",
+      "day": "Day",
+      "filterMachine": "Filter by Machine",
+      "month": "Month",
+      "searchPlaceholder": "Type user name or email...",
+      "searchUser": "Search User",
+      "today": "Today",
+      "week": "Week"
+    },
+    "dashboard": {
+      "appSettings": "App Settings",
+      "calendar": "Calendar",
+      "games": "Games",
+      "machines": "Machines",
+      "notifications": "Notifications",
+      "prices": "Prices",
+      "reservations": "Reservations",
+      "transactions": "Transactions",
+      "users": "Users"
+    },
+    "dialog": {
+      "cancel": "Cancel",
+      "chooseFile": "Choose file",
+      "close": "Close",
+      "create": "Create",
+      "date": "Date",
+      "noLogo": "No logo uploaded",
+      "save": "Save",
+      "time": "Time"
+    },
+    "games": {
+      "title": "Games",
+      "columns": {
+        "actions": "Actions",
+        "controller": "Controller",
+        "coop": "Co-op",
+        "genre": "Genre",
+        "id": "ID",
+        "identifier": "Identifier",
+        "multiplayer": "Multiplayer",
+        "name": "Name",
+        "platform": "Platform"
+      }
+    },
+    "hourTransactions": {
+      "title": "Hour Transactions",
+      "columns": {
+        "date": "Date",
+        "hours": "Hours",
+        "id": "ID",
+        "notice": "Notice",
+        "receiver": "Receiver",
+        "sender": "Sender",
+        "type": "Type"
+      }
+    },
+    "machines": {
+      "title": "Machines",
+      "columns": {
+        "actions": "Actions",
+        "hardware": "Hardware Configuration",
+        "id": "ID",
+        "name": "Machine Name",
+        "status": "Status",
+        "type": "Type"
+      }
+    },
+    "machineView": {
+      "activeReservation": "Active Reservation",
+      "activeSession": "Active Session",
+      "activeSessionDesc": "A user is currently logged in.",
+      "callbackPort": "Callback Port",
+      "callbackSecret": "Callback Secret",
+      "commands": "Commands",
+      "emailLabel": "Email",
+      "endTime": "End Time",
+      "fetchingStatus": "Fetching warden status...",
+      "globalIp": "Global IP",
+      "hardwareConfig": "Hardware Configuration",
+      "infoTab": "Info",
+      "localIp": "Local IP",
+      "loggedInUser": "Logged-in User",
+      "name": "Name",
+      "noActiveReservation": "No active reservation.",
+      "ready": "Ready",
+      "readyDesc": "Machine is on. No user logged in.",
+      "reservation": "Reservation",
+      "reservationId": "Reservation ID",
+      "roleLabel": "Role",
+      "startTime": "Start Time",
+      "status": "Status",
+      "statusLabel": "Status",
+      "statusTab": "Status",
+      "type": "Type",
+      "username": "Username",
+      "wardenDetails": "Warden Details",
+      "wardenNotConnected": "Warden Not Connected",
+      "wardenNotConnectedDesc": "This machine does not have Warden connection details configured. Edit the machine to set the Warden IP and port.",
+      "wardenOffline": "Warden Offline",
+      "workingDays": "Working Days",
+      "workingHours": "Working Hours"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "columns": {
+        "createdAt": "Created At",
+        "description": "Description",
+        "icon": "Icon",
+        "id": "ID",
+        "status": "Status",
+        "title": "Title",
+        "user": "User"
+      }
+    },
+    "prices": {
+      "title": "Prices",
+      "columns": {
+        "actions": "Actions",
+        "active": "Active",
+        "avg": "Avg",
+        "hours": "Hours",
+        "id": "ID",
+        "name": "Name",
+        "order": "Order",
+        "price": "Price",
+        "type": "Type"
+      }
+    },
+    "reservations": {
+      "title": "Reservations",
+      "columns": {
+        "actions": "Actions",
+        "endTime": "End Time",
+        "id": "ID",
+        "machine": "Machine",
+        "startTime": "Start Time",
+        "status": "Status",
+        "user": "User"
+      }
+    },
+    "table": {
+      "createNew": "Create New",
+      "noData": "No data available"
+    },
+    "userGames": {
+      "duration": "Duration",
+      "end": "End",
+      "game": "Game",
+      "genre": "Genre",
+      "loading": "Loading games...",
+      "machine": "Machine",
+      "noGamePlays": "No game plays found",
+      "session": "session",
+      "sessions": "sessions",
+      "start": "Start"
+    },
+    "userHours": {
+      "active": "Active",
+      "addHours": "Add Hours",
+      "adding": "Adding...",
+      "adminDiscount": "Admin Discount",
+      "amount": "Amount",
+      "created": "Created",
+      "discountPercent": "Discount %",
+      "expirationDate": "Expiration Date",
+      "expires": "Expires",
+      "forPlayedHours": "for {{hours}} played hours last month",
+      "hoursAmount": "Hours Amount",
+      "hoursExpire": "Hours Expire",
+      "hoursType": "Hours Type",
+      "manuallySet": "Manually set by admin",
+      "noPlayhours": "No playhours records found.",
+      "playDiscount": "Play Discount",
+      "playHours": "Play Hours",
+      "statusCol": "Status",
+      "used": "Used"
+    },
+    "userNotifications": {
+      "createdAt": "Created At",
+      "description": "Description",
+      "icon": "Icon",
+      "loading": "Loading notifications...",
+      "noNotifications": "No notifications found for this user.",
+      "status": "Status",
+      "titleCol": "Title"
+    },
+    "userReservations": {
+      "duration": "Duration",
+      "endTime": "End Time",
+      "loading": "Loading reservations...",
+      "machine": "Machine",
+      "noReservations": "No reservations found for this user.",
+      "startTime": "Start Time",
+      "status": "Status"
+    },
+    "users": {
+      "title": "Users",
+      "columns": {
+        "actions": "Actions",
+        "email": "Email",
+        "id": "ID",
+        "name": "Name",
+        "playHours": "PlayHours",
+        "role": "Role"
+      }
+    },
+    "userView": {
+      "createdAt": "Created At",
+      "email": "Email",
+      "lastUpdated": "Last Updated",
+      "loading": "Loading user details...",
+      "role": "Role",
+      "status": "Status",
+      "tabs": {
+        "games": "Games",
+        "hours": "Hours",
+        "notifications": "Notifications",
+        "reservations": "Reservations"
+      }
+    }
+  },
+  "user": {
+    "events": {
+      "underConstruction": "Under Construction"
+    },
+    "friends": {
+      "loadingMore": "Loading more results...",
+      "myFriends": "My Friends",
+      "noFriends": "No friends yet. Search for users above to add some friends!",
+      "noMoreResults": "No more results to show",
+      "noUsersFound": "No users found for",
+      "remaining": "remaining",
+      "searchingUsers": "Searching users...",
+      "searchPlaceholder": "Enter name or email",
+      "searchResults": "Search Results",
+      "searchUsers": "Search for users",
+      "showMore": "Show More"
+    },
+    "home": {
+      "activeReservations": "Active Reservations",
+      "extend": "Extend",
+      "loadingReservations": "Loading reservations...",
+      "newReservation": "New Reservation",
+      "play": "Play!",
+      "playHours": "Play Hours",
+      "youHave": "You have",
+      "playhours": "playhours"
+    },
+    "hours": {
+      "admin": "Admin",
+      "buyHours": "Buy Hours",
+      "discountBanner": "You have a <strong>{{discount}}%</strong> discount on all prices!",
+      "hours": "hours",
+      "loadingPrices": "Loading prices...",
+      "myGames": "My Games",
+      "noPrices": "No price packages available at the moment.",
+      "play": "Play",
+      "session": "session",
+      "sessions": "sessions",
+      "totalReservations": "Total Reservations"
+    },
+    "notifications": {
+      "empty": "No notifications yet",
+      "loading": "Loading notifications...",
+      "loadingMore": "Loading more...",
+      "loadMore": "Load more",
+      "markAllRead": "Mark all as read",
+      "title": "Notifications"
+    },
+    "reservations": {
+      "actions": "Actions",
+      "createdBy": "Created by",
+      "dateTime": "Date & Time",
+      "duration": "Duration",
+      "loadingReservations": "Loading reservations...",
+      "machine": "Machine",
+      "myReservations": "My Reservations",
+      "newReservation": "New Reservation",
+      "noReservations": "No reservations found",
+      "noReservationsDesc": "You haven't made any reservations yet.",
+      "status": "Status",
+      "viewAll": "View All Reservations",
+      "youHave": "You have",
+      "playhours": "playhours"
+    },
+    "settings": {
+      "changePassword": "Change Password",
+      "confirmNewPassword": "Confirm new password",
+      "confirmPassword": "Confirm New Password",
+      "currentPassword": "Current Password",
+      "email": "Email",
+      "enterCurrentPassword": "Enter current password",
+      "enterNewPassword": "Enter new password",
+      "language": "Language",
+      "languageDesc": "Choose your preferred language",
+      "leaveBlank": "Leave blank to keep your current password",
+      "loading": "Loading settings...",
+      "name": "Name",
+      "namePlaceholder": "Your full name",
+      "newPassword": "New Password",
+      "profileInfo": "Profile Information",
+      "saveChanges": "Save Changes",
+      "saving": "Saving...",
+      "title": "Account Settings",
+      "updateDetails": "Update your personal details",
+      "username": "Username",
+      "usernamePlaceholder": "Your username",
+      "appearance": "Appearance",
+      "appearanceDesc": "Choose your preferred theme",
+      "lightTheme": "Light",
+      "darkTheme": "Dark"
+    },
+    "wizard": {
+      "availableFriends": "Available Friends",
+      "availableHours": "Available hours",
+      "availableSlots": "available slots",
+      "basicInfo": "Schedule",
+      "checking": "Checking...",
+      "confirmation": "Confirmation",
+      "confirmDate": "Date",
+      "confirmTime": "Time",
+      "confirmCost": "Cost",
+      "confirmPlayer": "Player",
+      "confirmMachine": "Machine",
+      "createReservation": "Create Reservation",
+      "duration": "Duration",
+      "endTime": "End",
+      "filterFriends": "Type to filter friends...",
+      "insufficientHours": "Insufficient hours",
+      "insufficientHoursDetail": "Not enough playhours. Required: {{required}}, Available: {{available}}",
+      "maxUsersReached": "Maximum of {{max}} users reached (limited by available machines).",
+      "next": "Next",
+      "noFriendsAvailable": "All your friends are already selected, or you don't have any friends yet.",
+      "noTimeSlots": "No available time slots found.",
+      "reviewDetails": "Review your reservation details before submitting.",
+      "searchFriends": "Search friends",
+      "selectDate": "Select date",
+      "selectedUsers": "Selected Users",
+      "selectFriendsForReservation": "Select Friends for Reservation",
+      "selectSlotInstruction": "Select an available time slot and machine for your reservation.",
+      "selectTimeSlot": "Select Time Slot",
+      "selectUsers": "Select yourself and/or your friends for the reservation.",
+      "sessionType": "Solo or Friends",
+      "soloSession": "Solo",
+      "startDate": "Start Date",
+      "startTime": "Start",
+      "withFriends": "With Friends"
+    }
+  }
+}

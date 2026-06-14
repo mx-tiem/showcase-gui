@@ -1,0 +1,163 @@
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  .menu-button {
+    margin-right: 16px;
+  }
+  
+  .toolbar-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  
+  .nav-items {
+    display: none;
+    margin-left: 32px;
+    gap: 8px;
+    
+    a {
+      color: var(--mat-sys-on-primary-container);
+      
+      &.active-nav {
+        background-color: var(--mat-sys-primary);
+        color: var(--mat-sys-on-primary);
+      }
+      
+      &:hover:not(.active-nav) {
+        background-color: color-mix(in srgb, var(--mat-sys-on-primary-container) 10%, transparent);
+      }
+    }
+  }
+  
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .toolbar-icon-btn {
+    margin-left: 4px;
+    overflow: visible !important;
+  }
+}
+
+// Dropdown shared styles
+::ng-deep .notification-menu,
+::ng-deep .user-menu {
+  .dropdown-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    cursor: default;
+
+    .dropdown-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--mat-sys-on-surface);
+    }
+
+    .user-avatar-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+      color: var(--mat-sys-primary);
+    }
+  }
+}
+
+// Notification dropdown specifics
+::ng-deep .notification-menu {
+  min-width: 320px;
+  max-width: 380px;
+
+  .notification-item {
+    height: auto !important;
+    padding: 10px 16px !important;
+    white-space: normal !important;
+    line-height: 1.4;
+
+    .mat-icon {
+      color: var(--mat-sys-on-surface-variant);
+      margin-right: 12px;
+      flex-shrink: 0;
+
+      &.unread {
+        color: var(--mat-sys-primary);
+      }
+    }
+
+    .notification-content {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+
+      .notification-message {
+        font-size: 0.875rem;
+        color: var(--mat-sys-on-surface-variant);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+
+        &.unread {
+          color: var(--mat-sys-on-surface);
+          font-weight: 500;
+        }
+      }
+
+      .notification-time {
+        font-size: 0.75rem;
+        color: var(--mat-sys-outline);
+        margin-top: 2px;
+      }
+    }
+  }
+
+  .view-all-btn {
+    .view-all-text {
+      width: 100%;
+      text-align: center;
+      color: var(--mat-sys-primary);
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// User dropdown specifics
+::ng-deep .user-menu {
+  min-width: 200px;
+
+  .logout-item {
+    .mat-icon, span {
+      color: var(--mat-sys-error);
+    }
+  }
+}
+
+// Show navigation items only on extra large screens (Bootstrap xl breakpoint)
+@media (min-width: 1200px) {
+  .toolbar {
+    .nav-items {
+      display: flex;
+    }
+  }
+}
+
+// Bootstrap breakpoint integration
+@media (max-width: 767.98px) {
+  .toolbar {
+    .toolbar-title {
+      font-size: 1.1rem;
+    }
+  }
+}

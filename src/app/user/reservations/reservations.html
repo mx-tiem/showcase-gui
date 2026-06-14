@@ -1,0 +1,52 @@
+<div class="reservations-container">
+  <!-- Header Row -->
+  <div class="header-row row g-0 mt-5 mb-5">
+    <div class="col-4 d-flex align-items-center justify-content-end">
+      <mat-card class="playhours-card">
+        <mat-card-content>
+          <span class="playhours-label">{{ 'user.reservations.youHave' | transloco }}</span>
+          <span class="playhours-value">{{ playHours ?? '—' }}</span>
+          <span class="playhours-label">{{ 'user.reservations.playhours' | transloco }}</span>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-4"></div>
+    <div class="col-4 d-flex align-items-center justify-content-start gap-3">
+      <app-square-button
+        *ngIf="currentView === 'index'"
+        [label]="'user.reservations.newReservation' | transloco"
+        (click)="switchView()">
+      </app-square-button>
+      <app-square-button
+        *ngIf="currentView === 'wizard' && wizard.canGoBack"
+        [label]="'common.back' | transloco"
+        [reverse]="true"
+        (click)="wizard.goBack()">
+      </app-square-button>
+      <app-square-button
+        *ngIf="currentView === 'wizard' && wizard.canGoNext"
+        [label]="'user.wizard.next' | transloco"
+        [disabled]="!wizard.canGoNext"
+        (click)="wizard.goNext()">
+      </app-square-button>
+    </div>
+  </div>
+
+  <!-- View Container -->
+  <div class="view-container">
+    <!-- Reservations Index View -->
+    <app-reservations-index
+      *ngIf="currentView === 'index'"
+      [isActive]="currentView === 'index'">
+    </app-reservations-index>
+
+    <!-- Reservation Wizard View -->
+    <app-reservation-wizard
+      #wizard
+      *ngIf="currentView === 'wizard'"
+      [isActive]="currentView === 'wizard'"
+      (reservationCreated)="onReservationCreated($event)"
+      (cancelled)="onWizardCancelled()">
+    </app-reservation-wizard>
+  </div>
+</div>

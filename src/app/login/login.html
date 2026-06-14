@@ -1,0 +1,70 @@
+<div class="login-container">
+  @if (isLoading) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+  } @else {
+    <mat-card class="login-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'login.title' | transloco }}</mat-card-title>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'login.emailOrUsername' | transloco }}</mat-label>
+              <input 
+                matInput 
+                type="text" 
+                formControlName="login"
+                [placeholder]="'login.emailPlaceholder' | transloco"
+                required
+              >
+              @if (loginForm.get('login')?.hasError('required') && loginForm.get('login')?.touched) {
+                <mat-error>{{ 'login.emailRequired' | transloco }}</mat-error>
+              }
+              @if (loginForm.get('login')?.hasError('minlength')) {
+                <mat-error>{{ 'login.minLength' | transloco }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="form-group">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'login.password' | transloco }}</mat-label>
+              <input 
+                matInput 
+                type="password" 
+                formControlName="password"
+                [placeholder]="'login.passwordPlaceholder' | transloco"
+                required
+              >
+              @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+                <mat-error>{{ 'login.passwordRequired' | transloco }}</mat-error>
+              }
+              @if (loginForm.get('password')?.hasError('minlength')) {
+                <mat-error>{{ 'login.passwordMinLength' | transloco }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          @if (hasError) {
+            <div class="error-message">
+              {{ error }}
+            </div>
+          }
+
+          <button 
+            mat-raised-button 
+            type="submit"
+            class="full-width submit-button"
+            [disabled]="!loginForm.valid"
+          >
+            {{ 'login.submit' | transloco }}
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

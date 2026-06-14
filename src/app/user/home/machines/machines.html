@@ -1,0 +1,29 @@
+<div class="machines-grid">
+  <mat-card *ngFor="let machine of machines" class="machine-card" [ngClass]="machine.status" appearance="outlined">
+    <mat-card-content>
+      <div class="machine-header">
+        <mat-icon class="type-icon">{{ getMachineTypeIcon(machine.machineType) }}</mat-icon>
+        <span class="machine-name">{{ machine.name }}</span>
+        <mat-icon class="status-icon" [ngClass]="machine.status">{{ getStatusIcon(machine.status) }}</mat-icon>
+      </div>
+
+      <div class="machine-body" *ngIf="machine.status === 'working'">
+        <div class="game-logo-wrapper" *ngIf="machine.gameLogoUrl">
+          <img [src]="machine.gameLogoUrl" alt="" class="game-logo">
+        </div>
+        <div class="game-details">
+          <div class="game-name">{{ machine.currentGame }}</div>
+          <div class="player-name" *ngIf="machine.isFriend">{{ machine.currentUser }}</div>
+        </div>
+      </div>
+
+      <div class="machine-body" *ngIf="machine.status === 'available'">
+        <div class="status-label available">Available</div>
+      </div>
+
+      <div class="machine-body" *ngIf="machine.status === 'maintenance'">
+        <div class="status-label maintenance">Maintenance</div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

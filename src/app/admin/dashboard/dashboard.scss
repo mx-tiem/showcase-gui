@@ -1,0 +1,63 @@
+.dashboard-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h1 {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    color: var(--mat-sys-on-surface);
+  }
+}
+
+.dashboard-card {
+  height: 100%;
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: transparent;
+  box-shadow: none;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  mat-card-content {
+    padding: 0;
+  }
+}
+
+.dashboard-button {
+  width: 100%;
+  height: 200px;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background-color: var(--mat-sys-primary) !important;
+  color: var(--mat-sys-on-primary) !important;
+
+  // Override Material's internal hover state-layer and label colors
+  --mdc-filled-button-hover-state-layer-color: var(--mat-sys-on-primary);
+  --mdc-filled-button-hover-label-text-color: var(--mat-sys-on-primary);
+
+  &:hover {
+    background-color: var(--mat-sys-primary) !important;
+    color: var(--mat-sys-on-primary) !important;
+    filter: brightness(0.9);
+  }
+
+  mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    color: inherit !important;
+  }
+
+  span {
+    font-weight: 500;
+    color: inherit !important;
+  }
+}

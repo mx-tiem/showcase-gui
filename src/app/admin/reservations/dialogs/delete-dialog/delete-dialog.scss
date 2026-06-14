@@ -1,0 +1,121 @@
+.cancel-dialog-container {
+  .user-info-card,
+  .machine-info-card,
+  .creator-info-card {
+    mat-card-content {
+      .user-name,
+      .machine-name,
+      .creator-name {
+        font-weight: bold;
+        font-size: 1.1em;
+      }
+
+      .user-email,
+      .creator-email {
+        color: var(--mat-sys-on-surface-variant);
+        font-size: 0.9em;
+      }
+    }
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &.status-confirmed {
+      background-color: rgba(76, 175, 80, 0.15);
+      color: #66bb6a;
+    }
+    &.status-active {
+      background-color: rgba(33, 150, 243, 0.15);
+      color: #42a5f5;
+    }
+    &.status-done {
+      background-color: rgba(158, 158, 158, 0.15);
+      color: #bdbdbd;
+    }
+    &.status-cancelled {
+      background-color: rgba(244, 67, 54, 0.15);
+      color: #ef5350;
+    }
+    &.status-new {
+      background-color: rgba(255, 152, 0, 0.15);
+      color: #ffa726;
+    }
+  }
+
+  .policy-info {
+    padding: 8px 0;
+
+    p {
+      margin-bottom: 8px;
+    }
+  }
+
+  .refund-card,
+  .refund-result-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 1.05em;
+    font-weight: 500;
+
+    mat-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+
+    &.refund {
+      background-color: #e8f5e9;
+      border: 2px solid #4caf50;
+      color: #2e7d32;
+    }
+
+    &.no-refund {
+      background-color: #ffebee;
+      border: 2px solid #f44336;
+      color: #c62828;
+    }
+  }
+
+  .refund-switch-container {
+    text-align: center;
+    padding: 20px;
+
+    h5 {
+      margin-bottom: 16px;
+      color: var(--mat-sys-on-surface);
+    }
+
+    .refund-toggle {
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .refund-description {
+      margin-top: 12px;
+      font-style: italic;
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
+
+  .big-cancel-button {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 16px 32px;
+    min-width: 250px;
+    margin-top: 20px;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}

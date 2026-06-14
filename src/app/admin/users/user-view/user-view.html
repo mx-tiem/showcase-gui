@@ -1,0 +1,100 @@
+<div class="user-view-container">
+  <div *ngIf="loading" class="loading-container">
+    <mat-icon class="spinning">refresh</mat-icon>
+    <p>{{ 'admin.userView.loading' | transloco }}</p>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-container">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-raised-button color="primary" (click)="loadUser()">
+      {{ 'common.retry' | transloco }}
+    </button>
+  </div>
+
+  <div *ngIf="user && !loading" class="user-details mt-4">
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>person</mat-icon>
+        <mat-card-title>{{ user.name }}</mat-card-title>
+        <mat-card-subtitle>ID: {{ user.id }}</mat-card-subtitle>
+      </mat-card-header>
+      
+      <mat-card-content>
+        <div class="detail-section">
+          <div class="detail-row">
+            <span class="detail-label">
+              <mat-icon>email</mat-icon>
+            {{ 'admin.userView.email' | transloco }}
+            </span>
+            <span class="detail-value">{{ user.email }}</span>
+          </div>
+          
+          <mat-divider></mat-divider>
+          
+          <div class="detail-row">
+            <span class="detail-label">
+            <mat-icon>badge</mat-icon>
+            {{ 'admin.userView.role' | transloco }}
+            </span>
+            <span class="detail-value">
+              <mat-chip [ngClass]="getRoleClass(user.role)">
+                {{ user.role | uppercase }}
+              </mat-chip>
+            </span>
+          </div>
+          
+          <mat-divider *ngIf="user.status"></mat-divider>
+          
+          <div class="detail-row" *ngIf="user.status">
+            <span class="detail-label">
+              <mat-icon>check_circle</mat-icon>
+              {{ 'admin.userView.status' | transloco }}
+            </span>
+            <span class="detail-value">
+              <mat-chip [ngClass]="getStatusClass(user.status)">
+                {{ user.status | uppercase }}
+              </mat-chip>
+            </span>
+          </div>
+          
+          <mat-divider *ngIf="user.createdAt"></mat-divider>
+          
+          <div class="detail-row" *ngIf="user.createdAt">
+            <span class="detail-label">
+              <mat-icon>calendar_today</mat-icon>
+              {{ 'admin.userView.createdAt' | transloco }}
+            </span>
+            <span class="detail-value">{{ formatDate(user.createdAt) }}</span>
+          </div>
+          
+          <mat-divider *ngIf="user.updatedAt"></mat-divider>
+          
+          <div class="detail-row" *ngIf="user.updatedAt">
+            <span class="detail-label">
+              <mat-icon>update</mat-icon>
+              {{ 'admin.userView.lastUpdated' | transloco }}
+            </span>
+            <span class="detail-value">{{ formatDate(user.updatedAt) }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tabs Section -->
+    <mat-tab-group class="user-tabs mt-3" (selectedIndexChange)="onTabChange($event)">
+      <mat-tab [label]="'admin.userView.tabs.reservations' | transloco">
+        <ng-container #reservationsContainer></ng-container>
+      </mat-tab>
+      <mat-tab [label]="'admin.userView.tabs.hours' | transloco">
+        <ng-container #hoursContainer></ng-container>
+      </mat-tab>
+      <mat-tab [label]="'admin.userView.tabs.games' | transloco">
+        <ng-container #gamesContainer></ng-container>
+      </mat-tab>
+      <mat-tab [label]="'admin.userView.tabs.notifications' | transloco">
+        <ng-container #notificationsContainer></ng-container>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

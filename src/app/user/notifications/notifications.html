@@ -1,0 +1,67 @@
+<div class="notifications-page">
+  <div class="notifications-header">
+    <button mat-icon-button (click)="goBack()" class="back-btn">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>{{ 'user.notifications.title' | transloco }}</h2>
+    <span class="spacer"></span>
+    <button mat-stroked-button *ngIf="hasUnread()" (click)="markAllAsRead()" class="mark-all-btn">
+      <mat-icon>done_all</mat-icon>
+      {{ 'user.notifications.markAllRead' | transloco }}
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading()" class="loading-state">
+    <mat-icon class="loading-icon">notifications</mat-icon>
+    <p>{{ 'user.notifications.loading' | transloco }}</p>
+  </div>
+
+  <!-- Notifications List -->
+  <div class="notifications-list" *ngIf="!isLoading() && notifications().length > 0">
+    <mat-card
+      *ngFor="let notification of notifications()"
+      class="notification-card"
+      [class.unread]="!notification.read"
+      (click)="markAsRead(notification)"
+    >
+      <mat-card-content class="notification-card-content">
+        <div class="notification-icon-wrapper" [class.unread]="!notification.read">
+          <mat-icon>{{ notification.icon }}</mat-icon>
+        </div>
+        <div class="notification-body">
+          <div class="notification-title-row">
+            <span class="notification-title" [class.unread]="!notification.read">{{ notification.title }}</span>
+            <span class="notification-time">{{ getTimeAgo(notification.created_at) }}</span>
+          </div>
+          <p class="notification-description">{{ notification.long_description || notification.short_description }}</p>
+        </div>
+        <div class="notification-read-indicator" *ngIf="!notification.read"></div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Load More -->
+    <div class="load-more-section" *ngIf="hasMoreResults()">
+      <button
+        *ngIf="!isLoadingMore()"
+        mat-stroked-button
+        color="primary"
+        (click)="loadMore()"
+        class="load-more-btn"
+      >
+        <mat-icon>expand_more</mat-icon>
+        {{ 'user.notifications.loadMore' | transloco }}
+      </button>
+      <div *ngIf="isLoadingMore()" class="loading-more">
+        <mat-icon class="loading-icon">refresh</mat-icon>
+        <span>{{ 'user.notifications.loadingMore' | transloco }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading() && notifications().length === 0" class="empty-state">
+    <mat-icon class="empty-icon">notifications_none</mat-icon>
+    <p>{{ 'user.notifications.empty' | transloco }}</p>
+  </div>
+</div>

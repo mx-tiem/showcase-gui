@@ -1,0 +1,281 @@
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="wizard-dialog col-12 col-md-8">
+
+      <div class="wizard-content">
+        <mat-stepper #stepper linear>
+          <!-- Step 1: Session Type -->
+          <mat-step [stepControl]="sessionTypeForm" [label]="'user.wizard.sessionType' | transloco">
+            <div class="step-content">
+              <div class="session-type-selection">
+                <button class="session-type-btn" [class.active]="sessionType === 'solo'" (click)="selectSessionType('solo', stepper)" type="button">
+                  <mat-icon>person</mat-icon>
+                  <span>{{ 'user.wizard.soloSession' | transloco }}</span>
+                </button>
+                <button class="session-type-btn" [class.active]="sessionType === 'friends'" (click)="selectSessionType('friends', stepper)" type="button">
+                  <mat-icon>group</mat-icon>
+                  <span>{{ 'user.wizard.withFriends' | transloco }}</span>
+                </button>
+              </div>
+
+              <mat-expansion-panel *ngIf="showFriendsPanel" [expanded]="showFriendsPanel" class="friends-expansion-panel" hideToggle>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <mat-icon>group_add</mat-icon>
+                    {{ 'user.wizard.selectFriendsForReservation' | transloco }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="selected-users-info">
+                  <h4 *ngIf="selectedUsers.length > 0">{{ 'user.wizard.selectedUsers' | transloco }}</h4>
+                  <div class="users-cards-grid row g-3" *ngIf="selectedUsers.length > 0">
+                    <div class="col-6 col-md-3 p-3" *ngFor="let user of selectedUsers">
+                      <mat-card class="user-info-card">
+                        <mat-card-content class="d-flex align-items-center justify-content-between flex-nowrap">
+                          <div class="user-details">
+                            <div class="user-name">{{ user.name }}</div>
+                            <div class="user-email">{{ user.email }}</div>
+                          </div>
+                          <button mat-icon-button color="primary" (click)="removeUser(user)" [attr.aria-label]="'Remove ' + user.name" *ngIf="user.id !== currentUser?.id">
+                            <mat-icon>remove</mat-icon>
+                          </button>
+                        </mat-card-content>
+                      </mat-card>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="available-friends-info">
+                  <h4>{{ 'user.wizard.availableFriends' | transloco }}</h4>
+                  <p *ngIf="isMaxUsersReached" class="max-users-message">
+                    <mat-icon>info</mat-icon>
+                    {{ 'user.wizard.maxUsersReached' | transloco: { max: maxUsers } }}
+                  </p>
+                  <mat-form-field appearance="outline" class="friends-filter w-100 mb-3" *ngIf="!isMaxUsersReached">
+                    <mat-label>{{ 'user.wizard.searchFriends' | transloco }}</mat-label>
+                    <input matInput [(ngModel)]="friendsFilter" [ngModelOptions]="{standalone: true}" [placeholder]="'user.wizard.filterFriends' | transloco">
+                    <mat-icon matSuffix>search</mat-icon>
+                  </mat-form-field>
+                  <div class="friends-list row g-3" *ngIf="availableFriends.length > 0 && !isMaxUsersReached">
+                    <div class="col-6 col-md-3 p-3" *ngFor="let friend of availableFriends">
+                      <mat-card class="friend-card" (click)="addFriend(friend)">
+                        <mat-card-content class="d-flex align-items-center justify-content-between flex-nowrap">
+                          <div class="friend-details">
+                            <div class="friend-name">{{ friend.name }}</div>
+                            <div class="friend-email">{{ friend.email }}</div>
+                          </div>
+                          <button mat-icon-button color="primary" [attr.aria-label]="'Add ' + friend.name">
+                            <mat-icon>add</mat-icon>
+                          </button>
+                        </mat-card-content>
+                      </mat-card>
+                    </div>
+                  </div>
+                  <p *ngIf="availableFriends.length === 0 && !isMaxUsersReached" class="no-friends-message">{{ 'user.wizard.noFriendsAvailable' | transloco }}</p>
+                </div>
+              </mat-expansion-panel>
+            </div>
+          </mat-step>
+
+          <!-- Step 2: Schedule -->
+          <mat-step [stepControl]="basicInfoForm" [label]="'user.wizard.basicInfo' | transloco">
+            <form [formGroup]="basicInfoForm">
+              <div class="step-content">
+                <div class="schedule-row row">
+                  <div class="col-12 col-md-6 mb-3 mb-md-0">
+                    <mat-calendar
+                      [selected]="basicInfoForm.get('startDate')?.value"
+                      (selectedChange)="onDateSelected($event)"
+                      class="docked-calendar">
+                    </mat-calendar>
+                  </div>
+
+                  <div class="col-12 col-md-6 d-flex justify-content-end align-items-center">
+                    <div class="time-duration-column">
+                      <div class="time-row">
+                        <div class="time-picker-group">
+                          <label class="time-label">{{ 'user.wizard.startTime' | transloco }}</label>
+                          <timepicker
+                            formControlName="startTime"
+                            [showMeridian]="false"
+                            [minuteStep]="15"
+                            (ngModelChange)="onStartTimeChange()">
+                          </timepicker>
+                        </div>
+                        <div class="info-card" *ngIf="currentUser">
+                          <mat-icon>schedule</mat-icon>
+                          <div class="info-card-content">
+                            <span class="info-card-label">{{ 'user.wizard.availableHours' | transloco }}</span>
+                            <span class="info-card-value">{{ formatHours(currentUser.available_playhours || 0) }}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="insufficient-hours-banner" *ngIf="shouldShowInsufficientHoursError()">
+                        <mat-icon>error_outline</mat-icon>
+                        <span>{{ 'user.wizard.insufficientHoursDetail' | transloco: { required: formatHours(requiredHours || 0), available: formatHours(currentUser?.available_playhours || 0) } }}</span>
+                      </div>
+
+                      <div class="time-row">
+                        <div class="time-picker-group">
+                          <label class="time-label">{{ 'user.wizard.endTime' | transloco }}</label>
+                          <timepicker
+                            formControlName="endTime"
+                            [showMeridian]="false"
+                            [minuteStep]="15"
+                            [min]="basicInfoForm.get('startTime')?.value"
+                            (ngModelChange)="onEndTimeChange()">
+                          </timepicker>
+                        </div>
+                        <div class="info-card" [class.info-card-active]="calculatedDuration">
+                          <mat-icon>timelapse</mat-icon>
+                          <div class="info-card-content">
+                            <span class="info-card-label">{{ 'user.wizard.duration' | transloco }}</span>
+                            <span class="info-card-value">{{ formattedTotalDuration || '-' }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </mat-step>
+
+          <!-- Step 3: Select Time Slot -->
+          <mat-step [stepControl]="detailsForm" [label]="'user.wizard.selectTimeSlot' | transloco">
+            <div class="step-content">
+              <p>{{ 'user.wizard.selectSlotInstruction' | transloco }}</p>
+
+              <div *ngIf="availabilityData.length === 0" class="no-availability">
+                <p>{{ 'user.wizard.noTimeSlots' | transloco }}</p>
+              </div>
+
+              <div *ngIf="availabilityData.length > 0" class="date-slots-container">
+                <div class="date-cards-row row">
+                  <div
+                    *ngFor="let dayData of availabilityData; let i = index"
+                    class="col date-card-wrapper">
+                    <div
+                      class="date-card"
+                      [class.date-card-selected]="selectedDateIndex === i"
+                      [class.date-card-original]="dayData.original_date"
+                      (click)="selectedDateIndex = i">
+                      <span class="date-card-date">{{ formatDate(dayData.date) }}</span>
+                      <span class="date-card-slots">
+                        {{ dayData.available_reservations.length }} {{ 'user.wizard.availableSlots' | transloco }}
+                      </span>
+                      <span class="date-card-range">{{ formatHourRange(dayData.min_start_hour, dayData.max_start_hour) }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="date-tab-content">
+                  <ng-container *ngFor="let dayData of availabilityData; let i = index">
+                    <div *ngIf="selectedDateIndex === i" @tabSlide class="reservations-grid">
+                      <mat-card *ngFor="let reservation of dayData.available_reservations" class="reservation-card" [class.reservation-card-alt]="!dayData.original_date" [class.reservation-card-highlighted]="dayData.original_date && reservation.start_time === highlightedSlotTime">
+                        <span *ngIf="dayData.original_date && reservation.start_time === highlightedSlotTime" class="highlighted-star">★</span>
+                        <mat-card-header>
+                          <mat-card-title>
+                            {{ formatTime(reservation.start_time) }} - {{ formatTime(reservation.end_time) }}
+                          </mat-card-title>
+                          <mat-card-subtitle>{{ dayData.duration }} hours</mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                          <div class="reservation-info">
+                            <div class="pair-row" *ngFor="let pair of getUserMachinePairs(dayData.users, reservation.machines)">
+                              <div class="info-item">
+                                <mat-icon>person</mat-icon>
+                                <span>{{ pair.user }}</span>
+                              </div>
+                              <div class="divider">/</div>
+                              <div class="info-item">
+                                <mat-icon>computer</mat-icon>
+                                <span>{{ pair.machine }}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </mat-card-content>
+                        <mat-card-actions>
+                          <button mat-raised-button color="primary" (click)="selectReservationSlot(dayData, reservation, stepper)" type="button">
+                            {{ 'common.select' | transloco }}
+                          </button>
+                        </mat-card-actions>
+                      </mat-card>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </mat-step>
+          <!-- Step 4: Confirmation -->
+          <mat-step [stepControl]="confirmationForm" [label]="'user.wizard.confirmation' | transloco">
+            <div class="step-content" *ngIf="selectedReservation">
+              <p>{{ 'user.wizard.reviewDetails' | transloco }}</p>
+
+              <div class="confirmation-cards row g-3">
+                <!-- Schedule card -->
+                <div class="col-12 col-md-6 col-lg-3">
+                  <mat-card class="confirmation-card schedule-card">
+                  <mat-card-content>
+                    <div class="confirmation-info-row">
+                      <mat-icon>calendar_today</mat-icon>
+                      <div class="confirmation-info-text">
+                        <span class="confirmation-label">{{ 'user.wizard.confirmDate' | transloco }}</span>
+                        <span class="confirmation-value">{{ formatDate(selectedReservation.date) }}</span>
+                      </div>
+                    </div>
+                    <div class="confirmation-info-row">
+                      <mat-icon>schedule</mat-icon>
+                      <div class="confirmation-info-text">
+                        <span class="confirmation-label">{{ 'user.wizard.confirmTime' | transloco }}</span>
+                        <span class="confirmation-value">{{ formatTime(selectedReservation.start_time) }} - {{ formatTime(selectedReservation.end_time) }}</span>
+                      </div>
+                    </div>
+                    <div class="confirmation-info-row">
+                      <mat-icon>toll</mat-icon>
+                      <div class="confirmation-info-text">
+                        <span class="confirmation-label">{{ 'user.wizard.confirmCost' | transloco }}</span>
+                        <span class="confirmation-value">{{ confirmationCost }} {{ 'user.reservations.playhours' | transloco }}</span>
+                      </div>
+                    </div>
+                  </mat-card-content>
+                  </mat-card>
+                </div>
+
+                <!-- User/Machine pair cards -->
+                <div *ngFor="let pair of getUserMachinePairs(selectedReservation.users, selectedReservation.machines)" class="col-12 col-md-6 col-lg-3">
+                  <mat-card class="confirmation-card pair-card">
+                  <mat-card-content>
+                    <div class="confirmation-info-row">
+                      <mat-icon>person</mat-icon>
+                      <div class="confirmation-info-text">
+                        <span class="confirmation-label">{{ 'user.wizard.confirmPlayer' | transloco }}</span>
+                        <span class="confirmation-value">{{ pair.user }}</span>
+                      </div>
+                    </div>
+                    <div class="confirmation-info-row">
+                      <mat-icon>computer</mat-icon>
+                      <div class="confirmation-info-text">
+                        <span class="confirmation-label">{{ 'user.wizard.confirmMachine' | transloco }}</span>
+                        <span class="confirmation-value">{{ pair.machine }}</span>
+                      </div>
+                    </div>
+                  </mat-card-content>
+                  </mat-card>
+                </div>
+              </div>
+
+              <div class="confirmation-submit mt-5">
+                <app-pill-button
+                  [label]="'user.wizard.createReservation' | transloco"
+                  (click)="onSubmit()">
+                </app-pill-button>
+              </div>
+            </div>
+          </mat-step>
+        </mat-stepper>
+      </div>
+    </div>
+  </div>
+</div>

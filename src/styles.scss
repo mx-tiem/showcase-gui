@@ -1,0 +1,211 @@
+
+/* Importing Bootstrap SCSS file. */
+@use 'bootstrap/scss/bootstrap';
+
+// Include theming for Angular Material with `mat.theme()`.
+@use '@angular/material' as mat;
+
+/* Importing Angular Calendar CSS */
+@import '../node_modules/angular-calendar/css/angular-calendar.css';
+
+html {
+  height: 100%;
+  --mdc-theme-error: #d32f2f; /* Custom warn color */
+  --mat-sys-error: #d32f2f; /* System error color */
+  @include mat.theme((
+    color: (
+      primary: mat.$cyan-palette,
+      tertiary: mat.$orange-palette,
+      warn: mat.$red-palette,
+    ),
+    typography: Roboto,
+    density: 4,
+  ));
+}
+
+body {
+  // The color-scheme is set dynamically by ThemeService based on user preference.
+  // It defaults to 'dark' and can be switched to 'light' from settings.
+  color-scheme: dark;
+
+  // Set a default background, font and text colors for the application using
+  // Angular Material's system-level CSS variables. Learn more about these
+  // variables at https://material.angular.dev/guide/system-variables
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  // Reset the user agent margin.
+  margin: 0;
+  height: 100%;
+}
+
+/* Custom warn button color */
+.mat-mdc-raised-button[color="warn"] {
+  background-color: #d32f2f !important;
+  color: white !important;
+}
+
+.mat-mdc-raised-button[color="warn"]:hover {
+  background-color: #b71c1c !important;
+}
+
+/* Global card background: use a slightly more contrasted surface for cards */
+mat-card, .mat-mdc-card {
+  --mdc-elevated-card-container-color: var(--mat-sys-surface-container);
+  --mdc-outlined-card-container-color: var(--mat-sys-surface-container);
+}
+
+/* =============================================
+   Dojo Theme — warm gold/bronze & cherry red on light gray
+   ============================================= */
+body.theme-dojo {
+  /* Surface / background layers — light grays, warmer than default light theme */
+  --mat-sys-surface: #e8e4e0;
+  --mat-sys-surface-dim: #ddd9d4;
+  --mat-sys-surface-bright: #f0ece8;
+  --mat-sys-surface-container-lowest: #f5f1ec;
+  --mat-sys-surface-container-low: #ece8e3;
+  --mat-sys-surface-container: #e3dfda;
+  --mat-sys-surface-container-high: #dad6d1;
+  --mat-sys-surface-container-highest: #d1cdc8;
+  --mat-sys-surface-variant: #d5cec6;
+
+  /* On-surface text */
+  --mat-sys-on-surface: #2c2418;
+  --mat-sys-on-surface-variant: #4d4639;
+
+  /* Outline */
+  --mat-sys-outline: #7d7568;
+  --mat-sys-outline-variant: #cec5b8;
+
+  /* Primary — warm bronze / gold */
+  --mat-sys-primary: #8b6914;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #e8c555;
+  --mat-sys-on-primary-container: #3e2e00;
+  --mat-sys-primary-fixed: #ffdea0;
+  --mat-sys-on-primary-fixed: #2a1e00;
+  --mat-sys-inverse-primary: #f0c04a;
+
+  /* Secondary — muted warm brown */
+  --mat-sys-secondary: #7a6548;
+  --mat-sys-on-secondary: #ffffff;
+  --mat-sys-secondary-container: #c4a87a;
+  --mat-sys-on-secondary-container: #3b2e14;
+  --mat-sys-secondary-fixed: #f5deb8;
+  --mat-sys-on-secondary-fixed: #2c2010;
+
+  /* Tertiary — cherry red */
+  --mat-sys-tertiary: #b52a2a;
+  --mat-sys-on-tertiary: #ffffff;
+  --mat-sys-tertiary-container: #dc4444;
+  --mat-sys-on-tertiary-container: #410002;
+  --mat-sys-tertiary-fixed: #ffdad5;
+  --mat-sys-on-tertiary-fixed: #3b0604;
+
+  /* Error — keep cherry red aligned */
+  --mat-sys-error: #c62828;
+  --mat-sys-on-error: #ffffff;
+  --mat-sys-error-container: #ffdad5;
+  --mat-sys-on-error-container: #410002;
+  --mdc-theme-error: #c62828;
+
+  /* Inverse */
+  --mat-sys-inverse-surface: #33302b;
+  --mat-sys-inverse-on-surface: #f5f0ea;
+
+  /* Scrim & shadow */
+  --mat-sys-scrim: #000000;
+  --mat-sys-shadow: #000000;
+
+  /* Background shorthand */
+  --mat-sys-background: #e8e4e0;
+  --mat-sys-on-background: #2c2418;
+}
+
+/* Dojo theme: toolbar nav hover uses deeper gold */
+body.theme-dojo {
+  .toolbar .nav-items a:hover:not(.active-nav) {
+    background-color: #c9981e !important;
+    color: #ffffff !important;
+  }
+}
+
+/* =============================================
+   Dojo Dark Theme — cherry red & red on dark gray
+   ============================================= */
+body.theme-dojo-dark {
+  /* Surface / background layers — dark grays with warm undertone */
+  --mat-sys-surface: #1e1a18;
+  --mat-sys-surface-dim: #161311;
+  --mat-sys-surface-bright: #2e2925;
+  --mat-sys-surface-container-lowest: #110e0c;
+  --mat-sys-surface-container-low: #1a1614;
+  --mat-sys-surface-container: #231f1c;
+  --mat-sys-surface-container-high: #2d2926;
+  --mat-sys-surface-container-highest: #383330;
+  --mat-sys-surface-variant: #3d3532;
+
+  /* On-surface text */
+  --mat-sys-on-surface: #f0ddd6;
+  --mat-sys-on-surface-variant: #d4c4bc;
+
+  /* Outline */
+  --mat-sys-outline: #9c8e87;
+  --mat-sys-outline-variant: #534a45;
+
+  /* Primary — cherry red */
+  --mat-sys-primary: #ef5350;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #c62828;
+  --mat-sys-on-primary-container: #ffdad5;
+  --mat-sys-primary-fixed: #ffdad5;
+  --mat-sys-on-primary-fixed: #410002;
+  --mat-sys-inverse-primary: #b71c1c;
+
+  /* Secondary — muted warm red / rosewood */
+  --mat-sys-secondary: #d4a09a;
+  --mat-sys-on-secondary: #3b1510;
+  --mat-sys-secondary-container: #5c3a34;
+  --mat-sys-on-secondary-container: #ffdad5;
+  --mat-sys-secondary-fixed: #ffdad5;
+  --mat-sys-on-secondary-fixed: #2c0b07;
+
+  /* Tertiary — lighter red / coral accent */
+  --mat-sys-tertiary: #ff8a80;
+  --mat-sys-on-tertiary: #561c16;
+  --mat-sys-tertiary-container: #8b3a32;
+  --mat-sys-on-tertiary-container: #ffdad5;
+  --mat-sys-tertiary-fixed: #ffdad5;
+  --mat-sys-on-tertiary-fixed: #3b0604;
+
+  /* Error */
+  --mat-sys-error: #ffb4ab;
+  --mat-sys-on-error: #690005;
+  --mat-sys-error-container: #93000a;
+  --mat-sys-on-error-container: #ffdad5;
+  --mdc-theme-error: #ffb4ab;
+
+  /* Inverse */
+  --mat-sys-inverse-surface: #f0ddd6;
+  --mat-sys-inverse-on-surface: #1e1a18;
+
+  /* Scrim & shadow */
+  --mat-sys-scrim: #000000;
+  --mat-sys-shadow: #000000;
+
+  /* Background shorthand */
+  --mat-sys-background: #1e1a18;
+  --mat-sys-on-background: #f0ddd6;
+}
+
+/* Dojo Dark theme: toolbar nav hover uses deeper red */
+body.theme-dojo-dark {
+  .toolbar .nav-items a:hover:not(.active-nav) {
+    background-color: #a01c1c !important;
+    color: #ffffff !important;
+  }
+}
+
+/* You can add global styles to this file, and also import other style files */

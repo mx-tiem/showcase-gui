@@ -1,0 +1,218 @@
+.table-container {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .table-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-button {
+      color: var(--mat-sys-on-surface-variant);
+
+      &:hover {
+        color: var(--mat-sys-on-surface);
+      }
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--mat-sys-on-surface);
+      font-size: 24px;
+      font-weight: 500;
+    }
+    
+    .create-button {
+      background-color: var(--mat-sys-primary-container);
+      color: var(--mat-sys-on-primary-container);
+      
+      &:hover {
+        background-color: var(--mat-sys-primary-container);
+        filter: brightness(1.1);
+      }
+    }
+  }
+  
+  .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: color-mix(in srgb, var(--mat-sys-surface) 80%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--mat-sys-outline-variant);
+      border-top: 4px solid var(--mat-sys-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.admin-table {
+  width: 100%;
+  background: var(--mat-sys-surface-container);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--mat-sys-shadow) 30%, transparent);
+  color: var(--mat-sys-on-surface);
+  
+  th {
+    font-weight: 600;
+    background-color: var(--mat-sys-surface-container-high);
+    color: var(--mat-sys-on-surface);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+  
+  td {
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+    color: var(--mat-sys-on-surface);
+  }
+  
+  tr.mat-mdc-row:hover,
+  tr.mat-row:hover {
+    background-color: var(--mat-sys-surface-container-highest) !important;
+  }
+  
+  .no-data-row {
+    td {
+      text-align: center;
+      padding: 2rem;
+      color: var(--mat-sys-outline);
+      font-style: italic;
+    }
+  }
+  
+  .actions-column {
+    width: 150px;
+    text-align: center;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+    
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      min-width: 32px;
+      
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+      }
+      
+      &.view-btn {
+        color: var(--mat-sys-primary);
+        
+        &:hover {
+          background-color: color-mix(in srgb, var(--mat-sys-primary) 10%, transparent);
+        }
+      }
+      
+      &.edit-btn {
+        color: var(--mat-sys-tertiary);
+        
+        &:hover {
+          background-color: color-mix(in srgb, var(--mat-sys-tertiary) 10%, transparent);
+        }
+      }
+      
+      &.delete-btn {
+        color: var(--mat-sys-error);
+        
+        &:hover {
+          background-color: color-mix(in srgb, var(--mat-sys-error) 10%, transparent);
+        }
+      }
+    }
+  }
+}
+
+mat-paginator {
+  background: var(--mat-sys-surface-container);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+  color: var(--mat-sys-on-surface);
+  
+  ::ng-deep {
+    .mat-mdc-paginator-container {
+      color: var(--mat-sys-on-surface);
+    }
+    
+    .mat-mdc-icon-button {
+      color: var(--mat-sys-on-surface);
+    }
+    
+    .mat-mdc-select-value,
+    .mat-mdc-select-arrow {
+      color: var(--mat-sys-on-surface);
+    }
+  }
+}
+
+// Cell badge styles
+.cell-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+
+  // Reservation statuses
+  &.status-confirmed {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: #66bb6a;
+  }
+  &.status-active {
+    background-color: rgba(33, 150, 243, 0.15);
+    color: #42a5f5;
+  }
+  &.status-done {
+    background-color: rgba(158, 158, 158, 0.15);
+    color: #bdbdbd;
+  }
+  &.status-cancelled {
+    background-color: rgba(244, 67, 54, 0.15);
+    color: #ef5350;
+  }
+  &.status-new {
+    background-color: rgba(255, 152, 0, 0.15);
+    color: #ffa726;
+  }
+
+  // User roles
+  &.role-admin {
+    background-color: rgba(33, 150, 243, 0.15);
+    color: #42a5f5;
+  }
+  &.role-user {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: #66bb6a;
+  }
+}

@@ -1,0 +1,226 @@
+<div class="container-fluid app-settings-container">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10 col-xl-9">
+
+      <div class="settings-header">
+        <button mat-icon-button routerLink="/admin/dashboard" class="back-button" [matTooltip]="'admin.backToDashboard' | transloco">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <mat-icon>settings</mat-icon>
+        <h2>{{ 'admin.appSettings.title' | transloco }}</h2>
+      </div>
+
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="48"></mat-spinner>
+      </div>
+
+      <div *ngIf="!loading" class="settings-content">
+        <!-- Status Message -->
+        <div *ngIf="statusMessage" class="status-message" [class.success]="statusType === 'success'" [class.error]="statusType === 'error'">
+          <mat-icon>{{ statusType === 'success' ? 'check_circle' : 'error' }}</mat-icon>
+          <span>{{ statusMessage }}</span>
+        </div>
+
+        <!-- Working Hours Section -->
+        <mat-card class="settings-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>schedule</mat-icon>
+            <mat-card-title>{{ 'admin.appSettings.workingHours.title' | transloco }}</mat-card-title>
+            <mat-card-subtitle>{{ 'admin.appSettings.workingHours.subtitle' | transloco }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="row g-3 align-items-center">
+              <div class="col-12 col-md-5">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>{{ 'admin.appSettings.workingHours.opening' | transloco }}</mat-label>
+                  <input
+                    matInput
+                    [ngxMatTimepicker]="openingPicker"
+                    [(ngModel)]="openingHours"
+                    [format]="24"
+                    readonly>
+                  <ngx-mat-timepicker-toggle matIconSuffix [for]="openingPicker"></ngx-mat-timepicker-toggle>
+                  <ngx-mat-timepicker #openingPicker [minutesGap]="15"></ngx-mat-timepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-md-2 d-flex justify-content-center">
+                <mat-icon class="arrow-icon d-none d-md-block">arrow_forward</mat-icon>
+              </div>
+              <div class="col-12 col-md-5">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>{{ 'admin.appSettings.workingHours.closing' | transloco }}</mat-label>
+                  <input
+                    matInput
+                    [ngxMatTimepicker]="closingPicker"
+                    [(ngModel)]="closingHours"
+                    [format]="24"
+                    readonly>
+                  <ngx-mat-timepicker-toggle matIconSuffix [for]="closingPicker"></ngx-mat-timepicker-toggle>
+                  <ngx-mat-timepicker #closingPicker [minutesGap]="15"></ngx-mat-timepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Working Days Section -->
+        <mat-card class="settings-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>date_range</mat-icon>
+            <mat-card-title>{{ 'admin.appSettings.workingDays.title' | transloco }}</mat-card-title>
+            <mat-card-subtitle>{{ 'admin.appSettings.workingDays.subtitle' | transloco }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="row g-2">
+              <div class="col-6 col-sm-4 col-md-3 col-lg" *ngFor="let day of allDays">
+                <mat-checkbox
+                  [(ngModel)]="workingDays[day.value]"
+                  color="primary"
+                  class="day-checkbox">
+                  {{ day.label }}
+                </mat-checkbox>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Reservation Rules Section -->
+        <mat-card class="settings-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>rule</mat-icon>
+            <mat-card-title>{{ 'admin.appSettings.reservationRules.title' | transloco }}</mat-card-title>
+            <mat-card-subtitle>{{ 'admin.appSettings.reservationRules.subtitle' | transloco }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>{{ 'admin.appSettings.reservationRules.freeCancellation' | transloco }}</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    [(ngModel)]="freeCancellationHours"
+                    min="0"
+                    step="1">
+                  <mat-hint>{{ 'admin.appSettings.reservationRules.freeCancellationHint' | transloco }}</mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-md-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>{{ 'admin.appSettings.reservationRules.minHours' | transloco }}</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    [(ngModel)]="minHoursBeforeReservation"
+                    min="0"
+                    step="1">
+                  <mat-hint>{{ 'admin.appSettings.reservationRules.minHoursHint' | transloco }}</mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-md-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>{{ 'admin.appSettings.reservationRules.lateTolerance' | transloco }}</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    [(ngModel)]="startLateTolerance"
+                    min="0"
+                    step="1">
+                  <mat-hint>{{ 'admin.appSettings.reservationRules.lateToleranceHint' | transloco }}</mat-hint>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Discount Settings Section -->
+        <mat-card class="settings-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>percent</mat-icon>
+            <mat-card-title>{{ 'admin.appSettings.discount.title' | transloco }}</mat-card-title>
+            <mat-card-subtitle>{{ 'admin.appSettings.discount.subtitle' | transloco }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="row g-3">
+              <div class="col-12 col-md-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>{{ 'admin.appSettings.discount.maxDiscount' | transloco }}</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    [(ngModel)]="maxPlayDiscount"
+                    min="0"
+                    max="100"
+                    step="0.5">
+                  <mat-hint>{{ 'admin.appSettings.discount.maxDiscountHint' | transloco }}</mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-md-6">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>{{ 'admin.appSettings.discount.hoursRequired' | transloco }}</mat-label>
+                  <input
+                    matInput
+                    type="number"
+                    [(ngModel)]="maxPlayDiscountHoursRequired"
+                    min="1"
+                    step="1">
+                  <mat-hint>{{ 'admin.appSettings.discount.hoursRequiredHint' | transloco }}</mat-hint>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Warden Integration Section -->
+        <mat-card class="settings-card">
+          <mat-card-header>
+            <mat-icon mat-card-avatar>security</mat-icon>
+            <mat-card-title>{{ 'admin.appSettings.warden.title' | transloco }}</mat-card-title>
+            <mat-card-subtitle>{{ 'admin.appSettings.warden.subtitle' | transloco }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="row g-3 align-items-center">
+              <div class="col-12">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>{{ 'admin.appSettings.warden.secret' | transloco }}</mat-label>
+                  <input
+                    matInput
+                    [type]="showDojoWardenSecret ? 'text' : 'password'"
+                    [(ngModel)]="dojoWardenSecret"
+                    [placeholder]="'admin.appSettings.warden.secretPlaceholder' | transloco">
+                  <button mat-icon-button matSuffix (click)="showDojoWardenSecret = !showDojoWardenSecret" type="button">
+                    <mat-icon>{{ showDojoWardenSecret ? 'visibility_off' : 'visibility' }}</mat-icon>
+                  </button>
+                  <mat-hint>{{ 'admin.appSettings.warden.secretHint' | transloco }}</mat-hint>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Actions -->
+        <div class="row">
+          <div class="col-12 d-flex flex-column flex-sm-row justify-content-end gap-2">
+            <button
+              mat-raised-button
+              color="warn"
+              (click)="onReset()"
+              [disabled]="saving">
+              <mat-icon>restore</mat-icon>
+              {{ 'admin.appSettings.resetDefaults' | transloco }}
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="onSave()"
+              [disabled]="saving">
+              <mat-icon>save</mat-icon>
+              {{ saving ? ('admin.appSettings.saving' | transloco) : ('admin.appSettings.saveSettings' | transloco) }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

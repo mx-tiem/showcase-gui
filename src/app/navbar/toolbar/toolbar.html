@@ -1,0 +1,77 @@
+<mat-toolbar class="toolbar">
+  <span class="toolbar-title">{{ 'toolbar.title' | transloco }}</span>
+  
+  <nav class="nav-items">
+    <a
+      mat-button
+      *ngFor="let item of navItems"
+      [routerLink]="item.route"
+      routerLinkActive="active-nav"
+    >
+      {{ item.label | transloco }}
+    </a>
+  </nav>
+  
+  <span class="spacer"></span>
+
+  <!-- Notifications Dropdown -->
+  <button
+    *ngIf="isLoggedIn()"
+    mat-icon-button
+    [matMenuTriggerFor]="notificationMenu"
+    (menuOpened)="onNotificationMenuOpened()"
+    aria-label="Notifications"
+    class="toolbar-icon-btn"
+  >
+    <mat-icon [matBadge]="unreadCount()" [matBadgeHidden]="unreadCount() === 0" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
+  </button>
+
+  <mat-menu #notificationMenu="matMenu" class="notification-menu" xPosition="before">
+    <div class="dropdown-header" (click)="$event.stopPropagation()">
+      <span class="dropdown-title">{{ 'toolbar.notifications' | transloco }}</span>
+    </div>
+    <mat-divider></mat-divider>
+    <button mat-menu-item *ngFor="let notification of notifications()" class="notification-item">
+      <mat-icon [class.unread]="!notification.read">{{ notification.icon }}</mat-icon>
+      <div class="notification-content">
+        <span class="notification-message" [class.unread]="!notification.read">{{ notification.short_description }}</span>
+        <span class="notification-time">{{ notification.title }}</span>
+      </div>
+    </button>
+    <mat-divider *ngIf="notifications().length > 0"></mat-divider>
+    <button mat-menu-item *ngIf="notifications().length > 0" class="view-all-btn" (click)="onViewAllNotifications()">
+      <span class="view-all-text">{{ 'toolbar.viewAll' | transloco }}</span>
+    </button>
+    <button mat-menu-item *ngIf="notifications().length === 0" disabled>
+      <span>{{ 'toolbar.noNotifications' | transloco }}</span>
+    </button>
+  </mat-menu>
+
+  <!-- User Dropdown -->
+  <button
+    *ngIf="isLoggedIn()"
+    mat-icon-button
+    [matMenuTriggerFor]="userMenu"
+    aria-label="User profile"
+    class="toolbar-icon-btn"
+  >
+    <mat-icon>account_circle</mat-icon>
+  </button>
+
+  <mat-menu #userMenu="matMenu" class="user-menu" xPosition="before">
+    <div class="dropdown-header" (click)="$event.stopPropagation()">
+      <mat-icon class="user-avatar-icon">account_circle</mat-icon>
+      <span class="dropdown-title">{{ userName() }}</span>
+    </div>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="onSettings()">
+      <mat-icon>settings</mat-icon>
+      <span>{{ 'toolbar.settings' | transloco }}</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="onLogout()" class="logout-item">
+      <mat-icon>logout</mat-icon>
+      <span>{{ 'toolbar.logout' | transloco }}</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>

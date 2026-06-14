@@ -1,0 +1,378 @@
+.user-hours-container {
+  padding: 24px;
+
+  .discount-cards {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+
+    .discount-card {
+      flex: 1;
+      border-radius: 12px;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      mat-card-content {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 20px !important;
+      }
+
+      .discount-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        mat-icon {
+          font-size: 28px;
+          width: 28px;
+          height: 28px;
+        }
+      }
+
+      .discount-info {
+        .discount-value {
+          font-size: 28px;
+          font-weight: 700;
+          line-height: 1.2;
+        }
+
+        .discount-label {
+          font-size: 14px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 2px;
+        }
+
+        .discount-description {
+          font-size: 12px;
+          opacity: 0.7;
+        }
+      }
+
+      &.play-discount {
+        border-left: 4px solid #ff9800;
+
+        .discount-icon {
+          background-color: #fff3e0;
+
+          mat-icon {
+            color: #e65100;
+          }
+        }
+
+        .discount-value {
+          color: #e65100;
+        }
+
+        .discount-label {
+          color: #ef6c00;
+        }
+      }
+
+      &.admin-discount {
+        border-left: 4px solid #9c27b0;
+
+        mat-card-content {
+          position: relative;
+        }
+
+        .discount-icon {
+          background-color: #f3e5f5;
+
+          mat-icon {
+            color: #6a1b9a;
+          }
+        }
+
+        .discount-value {
+          color: #6a1b9a;
+        }
+
+        .discount-label {
+          color: #7b1fa2;
+        }
+
+        .discount-info.clickable {
+          cursor: pointer;
+          border-radius: 8px;
+          padding: 4px 8px;
+          margin: -4px -8px;
+          transition: background-color 0.2s ease;
+
+          &:hover {
+            background-color: rgba(156, 39, 176, 0.08);
+          }
+        }
+
+        .discount-edit {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex: 1;
+
+          .discount-input {
+            width: 100px;
+            margin-bottom: -1.25em;
+          }
+
+          .discount-edit-actions {
+            display: flex;
+            gap: 2px;
+          }
+        }
+      }
+    }
+  }
+
+  .add-hours-panel {
+    margin-bottom: 24px;
+
+    mat-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      mat-icon {
+        color: #3f51b5;
+      }
+    }
+
+    .form-content {
+      padding: 16px 0;
+
+      .row {
+        margin-left: -8px;
+        margin-right: -8px;
+
+        > div {
+          padding-left: 8px;
+          padding-right: 8px;
+        }
+      }
+
+      .full-width {
+        width: 100%;
+        margin-bottom: 16px;
+      }
+
+      .checkbox-field {
+        margin-bottom: 16px;
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+
+        button {
+          min-width: 120px;
+
+          mat-icon {
+            margin-right: 4px;
+          }
+        }
+      }
+    }
+  }
+
+  .loading-container,
+  .error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    text-align: center;
+
+    mat-icon,
+    mat-spinner {
+      margin-bottom: 16px;
+      color: var(--mat-sys-outline);
+    }
+
+    p {
+      font-size: 16px;
+      color: var(--mat-sys-outline);
+      margin-bottom: 16px;
+    }
+  }
+
+  .error-container mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: #f44336;
+  }
+
+  .hours-sections {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+
+    .hours-section {
+      mat-card-header {
+        margin-bottom: 16px;
+
+        mat-card-title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 18px;
+          font-weight: 600;
+
+          mat-icon {
+            color: #3f51b5;
+          }
+        }
+      }
+
+      .summary-cards {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+
+        .summary-card {
+          flex: 1;
+          padding: 20px;
+          border-radius: 8px;
+          text-align: center;
+
+          &.active {
+            background-color: #e8f5e9;
+            border: 2px solid #4caf50;
+          }
+
+          &.used {
+            background-color: #e3f2fd;
+            border: 2px solid #2196f3;
+          }
+
+          .summary-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+          }
+
+          .summary-label {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.8;
+          }
+
+          &.active .summary-value {
+            color: #2e7d32;
+          }
+
+          &.active .summary-label {
+            color: #2e7d32;
+          }
+
+          &.used .summary-value {
+            color: #1565c0;
+          }
+
+          &.used .summary-label {
+            color: #1565c0;
+          }
+        }
+      }
+
+      .table-container {
+        overflow-x: auto;
+
+        .hours-table {
+          width: 100%;
+
+          th {
+            font-weight: 600;
+            color: var(--mat-sys-on-surface-variant);
+          }
+
+          .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+
+            &.status-active {
+              background-color: rgba(76, 175, 80, 0.15);
+              color: #66bb6a;
+            }
+
+            &.status-expired {
+              background-color: rgba(244, 67, 54, 0.15);
+              color: #ef5350;
+            }
+
+            &.status-used {
+              background-color: rgba(33, 150, 243, 0.15);
+              color: #42a5f5;
+            }
+
+            &.status-reserved {
+              background-color: rgba(255, 152, 0, 0.15);
+              color: #ffa726;
+            }
+          }
+
+          .expires-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+
+          .expires-date {
+            font-size: 14px;
+            color: var(--mat-sys-on-surface-variant);
+          }
+
+          .expires-yes {
+            color: #4caf50;
+          }
+
+          .expires-no {
+            color: #9e9e9e;
+          }
+        }
+
+        .no-data {
+          text-align: center;
+          padding: 48px;
+          color: var(--mat-sys-on-surface-variant);
+
+          mat-icon {
+            font-size: 48px;
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            color: var(--mat-sys-outline);
+          }
+
+          p {
+            margin: 0;
+            font-size: 16px;
+          }
+        }
+
+        mat-paginator {
+          margin-top: 16px;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+<div class="prices-container">
+  <app-admin-table
+    title="admin.prices.title"
+    [columns]="columns"
+    [data]="prices"
+    [totalItems]="totalPrices"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [loading]="loading"
+    (sortChange)="onSortChange($event)"
+    (pageChange)="onPageChange($event)"
+    (actionClick)="onActionClick($event)"
+    (createClick)="onCreatePrice()">
+  </app-admin-table>
+</div>

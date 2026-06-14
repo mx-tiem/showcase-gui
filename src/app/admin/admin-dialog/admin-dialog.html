@@ -1,0 +1,182 @@
+<h2 mat-dialog-title>
+  <div class="title-content">
+    <mat-icon>{{ isViewMode ? 'visibility' : (isCreateMode ? 'add' : 'edit') }}</mat-icon>
+    <span>{{ dialogData.title }}</span>
+  </div>
+  <button 
+    mat-icon-button 
+    *ngIf="canToggleMode()" 
+    (click)="toggleMode()" 
+    [matTooltip]="isViewMode ? 'Edit' : 'View'"
+    class="mode-toggle-btn">
+    <mat-icon>{{ isViewMode ? 'edit' : 'visibility' }}</mat-icon>
+  </button>
+</h2>
+
+<mat-dialog-content>
+  <!-- Custom View Component Container -->
+  <div *ngIf="hasCustomView()" class="custom-view-container">
+    <ng-container #customViewContainer></ng-container>
+  </div>
+  
+  <!-- Default Form View -->
+  <div *ngIf="!hasCustomView()" class="dialog-form mt-4">
+    <div *ngFor="let field of dialogData.fields; let i = index" class="form-field-container">
+      <!-- Text/Email/Number inputs -->
+      <mat-form-field *ngIf="['text', 'email', 'number', 'password'].includes(field.type)" appearance="outline">
+        <mat-label>{{ field.label }}</mat-label>
+        <input 
+          matInput 
+          [type]="field.type === 'password' && !passwordVisibility[field.key] ? 'password' : (field.type === 'password' ? 'text' : field.type)" 
+          [(ngModel)]="formData[field.key]"
+          [placeholder]="field.placeholder || ''"
+          [readonly]="isFieldReadonly(field)"
+          [required]="field.required ?? false">
+        <button *ngIf="field.type === 'password'" mat-icon-button matSuffix (click)="passwordVisibility[field.key] = !passwordVisibility[field.key]" type="button">
+          <mat-icon>{{ passwordVisibility[field.key] ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-icon matSuffix *ngIf="field.required && field.type !== 'password'">star</mat-icon>
+      </mat-form-field>
+      
+      <!-- Date inputs -->
+      <div *ngIf="field.type === 'date'" class="date-field">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ field.label }}</mat-label>
+          <input 
+            matInput 
+            [matDatepicker]="datePicker"
+            [(ngModel)]="formData[field.key]"
+            [readonly]="isFieldReadonly(field)"
+            [required]="field.required ?? false">
+          <mat-datepicker-toggle matIconSuffix [for]="datePicker" [disabled]="isFieldReadonly(field)"></mat-datepicker-toggle>
+          <mat-datepicker #datePicker [disabled]="isFieldReadonly(field)"></mat-datepicker>
+          <mat-icon matSuffix *ngIf="field.required">star</mat-icon>
+        </mat-form-field>
+      </div>
+      
+      <!-- DateTime inputs -->
+      <div *ngIf="field.type === 'datetime-local'" class="datetime-field">
+        <mat-form-field appearance="outline" class="date-part">
+          <mat-label>{{ field.label }} - {{ 'admin.dialog.date' | transloco }}</mat-label>
+          <input 
+            matInput 
+            [matDatepicker]="dateTimePicker"
+            [(ngModel)]="formData[field.key + '_date']"
+            (ngModelChange)="onDateChange(field.key, $event)"
+            [readonly]="isFieldReadonly(field)"
+            [required]="field.required ?? false">
+          <mat-datepicker-toggle matIconSuffix [for]="dateTimePicker" [disabled]="isFieldReadonly(field)"></mat-datepicker-toggle>
+          <mat-datepicker #dateTimePicker [disabled]="isFieldReadonly(field)"></mat-datepicker>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="time-part">
+          <mat-label>{{ 'admin.dialog.time' | transloco }}</mat-label>
+          <input 
+            matInput 
+            [ngxMatTimepicker]="timePicker"
+            [(ngModel)]="formData[field.key + '_time']"
+            (ngModelChange)="onTimeChange(field.key, $event)"
+            [readonly]="isFieldReadonly(field)"
+            [required]="field.required ?? false"
+            [format]="24">
+          <ngx-mat-timepicker-toggle matIconSuffix [for]="timePicker" [disabled]="isFieldReadonly(field)"></ngx-mat-timepicker-toggle>
+          <ngx-mat-timepicker #timePicker [minutesGap]="15"></ngx-mat-timepicker>
+        </mat-form-field>
+      </div>
+      
+      <!-- Select inputs -->
+      <mat-form-field *ngIf="field.type === 'select'" appearance="outline">
+        <mat-label>{{ field.label }}</mat-label>
+        <mat-select 
+          [(ngModel)]="formData[field.key]"
+          [disabled]="isFieldReadonly(field)"
+          [required]="field.required ?? false">
+          <mat-option *ngFor="let option of field.options" [value]="option.value">
+            {{ option.label }}
+          </mat-option>
+        </mat-select>
+        <mat-icon matSuffix *ngIf="field.required">star</mat-icon>
+      </mat-form-field>
+      
+      <!-- Textarea -->
+      <mat-form-field *ngIf="field.type === 'textarea'" appearance="outline">
+        <mat-label>{{ field.label }}</mat-label>
+        <textarea 
+          matInput 
+          [(ngModel)]="formData[field.key]"
+          [placeholder]="field.placeholder || ''"
+          [readonly]="isFieldReadonly(field)"
+          [required]="field.required ?? false"
+          rows="4">
+        </textarea>
+        <mat-icon matSuffix *ngIf="field.required">star</mat-icon>
+      </mat-form-field>
+
+      <!-- Time inputs -->
+      <div *ngIf="field.type === 'time'" class="time-field">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ field.label }}</mat-label>
+          <input 
+            matInput 
+            [ngxMatTimepicker]="standaloneTimePicker"
+            [(ngModel)]="formData[field.key]"
+            [readonly]="isFieldReadonly(field)"
+            [required]="field.required ?? false"
+            [format]="24">
+          <ngx-mat-timepicker-toggle matIconSuffix [for]="standaloneTimePicker" [disabled]="isFieldReadonly(field)"></ngx-mat-timepicker-toggle>
+          <ngx-mat-timepicker #standaloneTimePicker [minutesGap]="15"></ngx-mat-timepicker>
+          <mat-icon matSuffix *ngIf="field.required">star</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <!-- File upload -->
+      <div *ngIf="field.type === 'file'" class="file-upload-field">
+        <label class="file-upload-label">{{ field.label }}</label>
+        <div class="file-upload-container" *ngIf="!isFieldReadonly(field)">
+          <button mat-stroked-button type="button" (click)="fileInput.click()">
+            <mat-icon>upload</mat-icon>
+            {{ formData[field.key + '_name'] || ('admin.dialog.chooseFile' | transloco) }}
+          </button>
+          <input #fileInput type="file" hidden [accept]="field.accept || 'image/*'" (change)="onFileSelected($event, field.key)">
+          <button mat-icon-button *ngIf="formData[field.key]" (click)="removeFile(field.key)" matTooltip="Remove file">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div *ngIf="isFieldReadonly(field) && field.value" class="file-preview">
+          <img [src]="field.value" alt="Logo" class="file-preview-img">
+        </div>
+        <div *ngIf="isFieldReadonly(field) && !field.value" class="file-no-preview">
+          {{ 'admin.dialog.noLogo' | transloco }}
+        </div>
+      </div>
+
+      <!-- Multi-select (checkbox group) -->
+      <div *ngIf="field.type === 'multi-select'" class="multi-select-field">
+        <label class="multi-select-label">{{ field.label }}</label>
+        <div class="multi-select-options">
+          <mat-checkbox
+            *ngFor="let option of field.options"
+            [(ngModel)]="formData[field.key][option.value]"
+            [disabled]="isFieldReadonly(field)"
+            color="primary"
+            class="multi-select-checkbox">
+            {{ option.label }}
+          </mat-checkbox>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" *ngIf="!hasCustomView()">
+  <button mat-button (click)="onCancel()">
+    {{ (isViewMode ? 'admin.dialog.close' : 'admin.dialog.cancel') | transloco }}
+  </button>
+  <button 
+    *ngIf="canEdit" 
+    mat-raised-button 
+    color="primary" 
+    (click)="onSave()">
+    {{ (isCreateMode ? 'admin.dialog.create' : 'admin.dialog.save') | transloco }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,14 @@
+<div class="hour-transactions-container">
+  <app-admin-table
+    title="admin.hourTransactions.title"
+    [columns]="columns"
+    [data]="transactions"
+    [totalItems]="totalTransactions"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [loading]="loading"
+    [showCreateButton]="false"
+    (sortChange)="onSortChange($event)"
+    (pageChange)="onPageChange($event)">
+  </app-admin-table>
+</div>

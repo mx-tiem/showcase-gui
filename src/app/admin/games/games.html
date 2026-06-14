@@ -1,0 +1,15 @@
+<div class="games-container">
+  <app-admin-table
+    title="admin.games.title"
+    [columns]="columns"
+    [data]="games"
+    [totalItems]="totalGames"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [loading]="loading"
+    (sortChange)="onSortChange($event)"
+    (pageChange)="onPageChange($event)"
+    (actionClick)="onActionClick($event)"
+    (createClick)="onCreateGame()">
+  </app-admin-table>
+</div>

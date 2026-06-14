@@ -1,0 +1,15 @@
+<div class="users-container">
+  <app-admin-table
+    title="admin.users.title"
+    [columns]="columns"
+    [data]="users"
+    [totalItems]="totalUsers"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [loading]="loading"
+    (sortChange)="onSortChange($event)"
+    (pageChange)="onPageChange($event)"
+    (actionClick)="onActionClick($event)"
+    (createClick)="onCreateUser()">
+  </app-admin-table>
+</div>

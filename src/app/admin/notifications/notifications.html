@@ -1,0 +1,16 @@
+<div class="notifications-container">
+  <app-admin-table
+    title="admin.notifications.title"
+    [columns]="columns"
+    [data]="notifications"
+    [totalItems]="totalNotifications"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [loading]="loading"
+    [showCreateButton]="false"
+    [actions]="[]"
+    (sortChange)="onSortChange($event)"
+    (pageChange)="onPageChange($event)"
+    (actionClick)="onActionClick($event)">
+  </app-admin-table>
+</div>

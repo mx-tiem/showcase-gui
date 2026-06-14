@@ -1,0 +1,170 @@
+<div class="wizard-dialog">
+  <h2 mat-dialog-title>
+    {{ data.mode === 'create' ? 'Create New Reservation' : 'Edit Reservation' }}
+  </h2>
+
+  <mat-dialog-content>
+    <mat-stepper #stepper linear>
+      <!-- Step 1: Basic Information -->
+      <mat-step [stepControl]="basicInfoForm" label="Basic Information">
+        <form [formGroup]="basicInfoForm">
+          <div class="step-content">
+
+            <div class="datetime-row">
+              <mat-form-field appearance="outline" class="date-field">
+                <mat-label>Start Date</mat-label>
+                <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" placeholder="Select date">
+                <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #startDatePicker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="time-field">
+                <mat-label>Start Time</mat-label>
+                <input 
+                  matInput 
+                  [ngxMatTimepicker]="startTimePicker"
+                  formControlName="startTime"
+                  placeholder="Select time"
+                  [format]="24">
+                <ngx-mat-timepicker-toggle matIconSuffix [for]="startTimePicker"></ngx-mat-timepicker-toggle>
+                <ngx-mat-timepicker #startTimePicker [minutesGap]="15"></ngx-mat-timepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="hours-field">
+                <mat-label>Duration (hours)</mat-label>
+                <input 
+                  matInput 
+                  type="number" 
+                  formControlName="hours"
+                  placeholder="e.g., 1.5"
+                  step="0.25"
+                  min="0.25">
+                <mat-error *ngIf="basicInfoForm.get('hours')?.hasError('required')">Duration is required</mat-error>
+                <mat-error *ngIf="basicInfoForm.get('hours')?.hasError('min')">Duration must be at least 0.5 hours</mat-error>
+                <mat-error *ngIf="basicInfoForm.get('hours')?.hasError('maxHours')">
+                  Duration cannot exceed {{ getMinimumUserHours() }} hours (minimum available from selected users)
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <p>Select one or multiple users for the reservation.</p>
+            
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Add Users</mat-label>
+              <input 
+                matInput
+                type="text" 
+                [(ngModel)]="userSearchTerm" 
+                [ngModelOptions]="{standalone: true}"
+                [matAutocomplete]="userAuto"
+                placeholder="Type user name or email to search...">
+              <mat-autocomplete #userAuto="matAutocomplete" (optionSelected)="selectUser($event.option.value)">
+                <mat-option *ngFor="let user of filteredUsers" [value]="user">
+                  {{ user.name }} ({{ user.email }})
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <div class="selected-users-info" *ngIf="selectedUsers.length > 0">
+              <h4>Selected Users</h4>
+              <div class="users-cards-grid">
+                <mat-card *ngFor="let user of selectedUsers" class="user-info-card">
+                  <mat-card-content>
+                    <button mat-icon-button class="remove-user-btn" (click)="removeUser(user)" [attr.aria-label]="'Remove ' + user.name">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                    <div class="user-details">
+                      <div class="user-name">{{ user.name }}</div>
+                      <div class="user-email">{{ user.email }}</div>
+                      <div class="user-hours" [class.insufficient]="isInsufficientHours(user)">Play Hours: {{ user.available_playhours || 0 }}</div>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </div>
+          </div>
+          <div class="step-actions">
+            <button mat-button type="button" [disabled]="!basicInfoForm.valid || checkingAvailability || !hasAllUsersSufficientHours()" (click)="checkAvailability(stepper)">
+              {{ checkingAvailability ? 'Checking...' : 'Next' }}
+            </button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- Step 2: Select Time Slot -->
+      <mat-step [stepControl]="detailsForm" label="Select Time Slot">
+        <form [formGroup]="detailsForm">
+          <div class="step-content">
+            <p>Select an available time slot and machine for your reservation.</p>
+            
+            <div *ngIf="availabilityData.length === 0" class="no-availability">
+              <p>No available time slots found.</p>
+            </div>
+
+            <mat-accordion *ngIf="availabilityData.length > 0">
+              <mat-expansion-panel *ngFor="let dayData of availabilityData" [class.original-date]="dayData.original_date">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ formatDate(dayData.date) }}
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    {{ dayData.available_reservations.length }} available slots
+                    ({{ formatHourRange(dayData.min_start_hour, dayData.max_start_hour) }})
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="reservations-grid">
+                  <mat-card *ngFor="let reservation of dayData.available_reservations" class="reservation-card">
+                    <mat-card-header>
+                      <mat-card-title>{{ formatTime(reservation.start_time) }} - {{ formatTime(reservation.end_time) }}</mat-card-title>
+                      <mat-card-subtitle>{{ dayData.duration }} hours</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                      <div class="reservation-info">
+                        <div class="pair-row" *ngFor="let pair of getUserMachinePairs(dayData.users, reservation.machines)">
+                          <div class="info-item">
+                            <mat-icon>person</mat-icon>
+                            <span>{{ pair.user }}</span>
+                          </div>
+                          <div class="divider">/</div>
+                          <div class="info-item">
+                            <mat-icon>computer</mat-icon>
+                            <span>{{ pair.machine }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-card-content>
+                    <mat-card-actions>
+                      <button mat-raised-button color="primary" (click)="selectReservationSlot(dayData, reservation, stepper)" type="button">
+                        Select
+                      </button>
+                    </mat-card-actions>
+                  </mat-card>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+          <div class="step-actions">
+            <button mat-button matStepperPrevious type="button">Back</button>
+          </div>
+        </form>
+      </mat-step>
+
+      <!-- Step 3: Confirmation -->
+      <mat-step [stepControl]="confirmationForm" label="Confirmation">
+        <form [formGroup]="confirmationForm">
+          <div class="step-content">
+            <p>Review your reservation details before submitting.</p>
+            <!-- Summary will be added in next iteration -->
+          </div>
+          <div class="step-actions">
+            <button mat-button matStepperPrevious type="button">Back</button>
+            <button mat-raised-button color="primary" (click)="onSubmit()" type="button">
+              {{ data.mode === 'create' ? 'Create Reservation' : 'Save Changes' }}
+            </button>
+          </div>
+        </form>
+      </mat-step>
+    </mat-stepper>
+  </mat-dialog-content>
+</div>

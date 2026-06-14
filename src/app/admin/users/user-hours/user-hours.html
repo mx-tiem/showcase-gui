@@ -1,0 +1,251 @@
+<div class="user-hours-container">
+  <!-- Discount Cards -->
+  <div class="discount-cards" *ngIf="userData">
+    <mat-card class="discount-card play-discount">
+      <mat-card-content>
+        <div class="discount-icon">
+          <mat-icon>trending_down</mat-icon>
+        </div>
+        <div class="discount-info">
+          <div class="discount-value">{{ userData.discount_play || 0 }}%</div>
+          <div class="discount-label">{{ 'admin.userHours.playDiscount' | transloco }}</div>
+          <div class="discount-description">{{ 'admin.userHours.forPlayedHours' | transloco: { hours: userData.played_hours || 0 } }}</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="discount-card admin-discount">
+      <mat-card-content>
+        <div class="discount-icon">
+          <mat-icon>admin_panel_settings</mat-icon>
+        </div>
+        <div class="discount-info clickable" *ngIf="!editingAdminDiscount" (click)="startEditAdminDiscount()" matTooltip="Click to edit">
+          <div class="discount-value">{{ userData.discount_admin || 0 }}%</div>
+          <div class="discount-label">{{ 'admin.userHours.adminDiscount' | transloco }}</div>
+          <div class="discount-description">{{ 'admin.userHours.manuallySet' | transloco }}</div>
+        </div>
+        <div class="discount-edit" *ngIf="editingAdminDiscount">
+          <mat-form-field appearance="outline" class="discount-input">
+            <mat-label>{{ 'admin.userHours.discountPercent' | transloco }}</mat-label>
+            <input matInput type="number" [(ngModel)]="adminDiscountValue" min="0" max="100" step="1">
+          </mat-form-field>
+          <div class="discount-edit-actions">
+            <button mat-icon-button color="primary" (click)="saveAdminDiscount()" [disabled]="savingAdminDiscount" matTooltip="Save">
+              <mat-icon>check</mat-icon>
+            </button>
+            <button mat-icon-button (click)="cancelEditAdminDiscount()" [disabled]="savingAdminDiscount" matTooltip="Cancel">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Add Hours Expansion Panel -->
+  <mat-expansion-panel class="add-hours-panel" #addHoursPanel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-icon>add_circle</mat-icon>
+        <span>{{ 'admin.userHours.addHours' | transloco }}</span>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    
+    <form [formGroup]="addHoursForm" (ngSubmit)="onSubmitAddHours()">
+      <div class="form-content">
+        <div class="row align-items-center">
+          <!-- Hours Amount -->
+          <div class="col-12 col-md-3">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'admin.userHours.hoursAmount' | transloco }}</mat-label>
+              <input 
+                matInput 
+                type="number" 
+                formControlName="hoursAmount"
+                placeholder="e.g., 2.5"
+                step="0.1"
+                min="0.1">
+              <mat-error *ngIf="addHoursForm.get('hoursAmount')?.hasError('required')">
+                Hours amount is required
+              </mat-error>
+              <mat-error *ngIf="addHoursForm.get('hoursAmount')?.hasError('min')">
+                Hours amount must be at least 0.1
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Hours Type -->
+          <div class="col-12 col-md-3">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'admin.userHours.hoursType' | transloco }}</mat-label>
+              <mat-select formControlName="hoursType">
+                <mat-option *ngFor="let type of hoursTypes" [value]="type.value">
+                  {{ type.label }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- Expires Checkbox -->
+          <div class="col-12 col-md-2">
+            <div class="checkbox-field">
+              <mat-checkbox formControlName="expires">
+                {{ 'admin.userHours.hoursExpire' | transloco }}
+              </mat-checkbox>
+            </div>
+          </div>
+
+          <!-- Expiration Date (shown only if expires is true) -->
+          <div class="col-12 col-md-4" *ngIf="addHoursForm.get('expires')?.value">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'admin.userHours.expirationDate' | transloco }}</mat-label>
+              <input 
+                matInput 
+                [matDatepicker]="expirationDatePicker" 
+                formControlName="expiresAt" 
+                placeholder="Select expiration date">
+              <mat-datepicker-toggle matIconSuffix [for]="expirationDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #expirationDatePicker></mat-datepicker>
+              <mat-error *ngIf="addHoursForm.get('expiresAt')?.hasError('required')">
+                Expiration date is required when hours expire
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit"
+            [disabled]="addHoursForm.invalid || submitting">
+            <mat-icon *ngIf="!submitting">add</mat-icon>
+            <mat-icon *ngIf="submitting">
+              <mat-spinner diameter="20"></mat-spinner>
+            </mat-icon>
+            {{ submitting ? ('admin.userHours.adding' | transloco) : ('admin.userHours.addHours' | transloco) }}
+          </button>
+          <button 
+            mat-button 
+            type="button" 
+            (click)="resetForm()"
+            [disabled]="submitting">
+            {{ 'common.reset' | transloco }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </mat-expansion-panel>
+
+  <!-- Hours Display - Two Sections -->
+  <div class="hours-sections">
+    <!-- Playhours Section -->
+    <mat-card class="hours-section">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>videogame_asset</mat-icon>
+          {{ 'admin.userHours.playHours' | transloco }}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+          <div class="summary-card active">
+            <div class="summary-value">{{ playhoursActive }}</div>
+            <div class="summary-label">{{ 'admin.userHours.active' | transloco }}</div>
+          </div>
+          <div class="summary-card used">
+            <div class="summary-value">{{ playhoursUsed }}</div>
+            <div class="summary-label">{{ 'admin.userHours.used' | transloco }}</div>
+          </div>
+        </div>
+
+        <div *ngIf="playhoursLoading" class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+
+        <div *ngIf="playhoursError && !playhoursLoading" class="error-container">
+          <mat-icon>error_outline</mat-icon>
+          <p>{{ playhoursError }}</p>
+          <button mat-raised-button color="primary" (click)="loadPlayhours()">
+            {{ 'common.retry' | transloco }}
+          </button>
+        </div>
+
+        <div *ngIf="!playhoursLoading && !playhoursError" class="table-container">
+          <table mat-table [dataSource]="playhoursData" class="hours-table">
+            <!-- Hours Amount Column -->
+            <ng-container matColumnDef="hours_amount">
+              <th mat-header-cell *matHeaderCellDef>{{ 'admin.userHours.amount' | transloco }}</th>
+              <td mat-cell *matCellDef="let hour">{{ hour.hours_amount }}/{{ hour.start_amount }}</td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="hours_status">
+              <th mat-header-cell *matHeaderCellDef>{{ 'admin.userHours.statusCol' | transloco }}</th>
+              <td mat-cell *matCellDef="let hour">
+                <span class="status-badge" [ngClass]="'status-' + hour.hours_status">
+                  {{ hour.hours_status }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Expires Column -->
+            <ng-container matColumnDef="expires">
+              <th mat-header-cell *matHeaderCellDef>{{ 'admin.userHours.expires' | transloco }}</th>
+              <td mat-cell *matCellDef="let hour">
+                <div class="expires-cell">
+                  <mat-icon [class.expires-yes]="hour.expires" [class.expires-no]="!hour.expires">
+                    {{ hour.expires ? 'check_circle' : 'cancel' }}
+                  </mat-icon>
+                  <span *ngIf="hour.expires && hour.expires_at" class="expires-date">
+                    {{ hour.expires_at | date: 'MMM d, y' }}
+                  </span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Created At Column -->
+            <ng-container matColumnDef="created_at">
+              <th mat-header-cell *matHeaderCellDef>{{ 'admin.userHours.created' | transloco }}</th>
+              <td mat-cell *matCellDef="let hour">{{ hour.created_at | date: 'MMM d, y, h:mm a' }}</td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+              <td mat-cell *matCellDef="let hour">
+                <button 
+                  mat-icon-button 
+                  color="warn" 
+                  (click)="deleteMachineHour(hour.id, 'playhours')"
+                  matTooltip="Delete">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          
+          <div *ngIf="playhoursData.length === 0" class="no-data">
+            <mat-icon>info</mat-icon>
+            <p>{{ 'admin.userHours.noPlayhours' | transloco }}</p>
+          </div>
+
+          <mat-paginator
+            *ngIf="playhoursTotalCount > playhoursPerPage"
+            [length]="playhoursTotalCount"
+            [pageSize]="playhoursPerPage"
+            [pageIndex]="playhoursPage"
+            [pageSizeOptions]="[5, 10, 25, 50]"
+            (page)="onPlayhoursPageChange($event)"
+            showFirstLastButtons>
+          </mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

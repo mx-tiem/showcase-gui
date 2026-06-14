@@ -1,0 +1,224 @@
+<mat-tab-group>
+  <!-- Status Tab -->
+  <mat-tab [label]="'admin.machineView.statusTab' | transloco">
+    <div class="tab-content">
+      @if (isWardenConnected) {
+        <!-- Warden Status -->
+        <div class="warden-status-section">
+          @if (wardenStatusLoading) {
+            <div class="status-loading">
+              <mat-spinner diameter="32"></mat-spinner>
+              <span>{{ 'admin.machineView.fetchingStatus' | transloco }}</span>
+            </div>
+          } @else if (wardenStatusError) {
+            <div class="status-card status-offline">
+              <div class="status-card-header">
+                <mat-icon>cloud_off</mat-icon>
+                <div>
+                  <h3>{{ 'admin.machineView.wardenOffline' | transloco }}</h3>
+                  <p>{{ wardenStatusError }}</p>
+                </div>
+              </div>
+            </div>
+          } @else if (wardenStatus) {
+            <!-- Warden State Badge -->
+            <div class="status-card" [class.status-ready]="wardenStatus.status === 'ready'" [class.status-active]="wardenStatus.status === 'active'">
+              <div class="status-card-header">
+                <mat-icon>{{ wardenStatus.status === 'ready' ? 'check_circle' : 'person' }}</mat-icon>
+                <div>
+                  <h3>{{ wardenStatus.status === 'ready' ? ('admin.machineView.ready' | transloco) : ('admin.machineView.activeSession' | transloco) }}</h3>
+                  <p>{{ wardenStatus.status === 'ready' ? ('admin.machineView.readyDesc' | transloco) : ('admin.machineView.activeSessionDesc' | transloco) }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Logged-in User Info -->
+            @if (wardenStatus.status === 'active' && wardenStatus.user) {
+              <div class="detail-card">
+                <h4>{{ 'admin.machineView.loggedInUser' | transloco }}</h4>
+                <div class="detail-rows">
+                  <div class="detail-row">
+                    <span class="detail-label">{{ 'admin.machineView.username' | transloco }}</span>
+                    <span class="detail-value">{{ wardenStatus.user.username }}</span>
+                  </div>
+                  @if (wardenStatus.user.email) {
+                    <div class="detail-row">
+                      <span class="detail-label">{{ 'admin.machineView.emailLabel' | transloco }}</span>
+                      <span class="detail-value">{{ wardenStatus.user.email }}</span>
+                    </div>
+                  }
+                  <div class="detail-row">
+                    <span class="detail-label">{{ 'admin.machineView.roleLabel' | transloco }}</span>
+                    <mat-chip [class]="wardenStatus.user.role === 'admin' ? 'role-admin' : 'role-user'">{{ wardenStatus.user.role }}</mat-chip>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Reservation Info -->
+              @if (wardenStatus.reservation) {
+                <div class="detail-card">
+                  <h4>{{ 'admin.machineView.activeReservation' | transloco }}</h4>
+                  <div class="detail-rows">
+                    <div class="detail-row">
+                      <span class="detail-label">{{ 'admin.machineView.reservationId' | transloco }}</span>
+                      <span class="detail-value">#{{ wardenStatus.reservation.id }}</span>
+                    </div>
+                    <div class="detail-row">
+                      <span class="detail-label">{{ 'admin.machineView.statusLabel' | transloco }}</span>
+                      <mat-chip class="reservation-status">{{ wardenStatus.reservation.status }}</mat-chip>
+                    </div>
+                    <div class="detail-row">
+                    <span class="detail-label">{{ 'admin.machineView.startTime' | transloco }}</span>
+                    <span class="detail-value">{{ formatDateTime(wardenStatus.reservation.start_time) }}</span>
+                  </div>
+                    <div class="detail-row">
+                    <span class="detail-label">{{ 'admin.machineView.endTime' | transloco }}</span>
+                      <span class="detail-value">{{ formatDateTime(wardenStatus.reservation.end_time) }}</span>
+                    </div>
+                  </div>
+                </div>
+              } @else if (wardenStatus.user.role !== 'admin') {
+                <div class="detail-card">
+                  <h4>{{ 'admin.machineView.reservation' | transloco }}</h4>
+                  <p class="no-reservation">{{ 'admin.machineView.noActiveReservation' | transloco }}</p>
+                </div>
+              }
+            }
+          }
+        </div>
+
+        <mat-divider class="section-divider"></mat-divider>
+
+        <!-- Warden Commands -->
+        <div class="status-section">
+          <h3>{{ 'admin.machineView.commands' | transloco }}</h3>
+          <p class="warden-info">
+            Connected to Warden at <strong>{{ machine?.warden_local_ip }}:{{ machine?.warden_callback_port }}</strong>
+          </p>
+
+          <div class="command-buttons">
+            <button mat-raised-button color="primary" (click)="sendCommand('lock')" [disabled]="commandLoading['lock']">
+              @if (commandLoading['lock']) {
+                <mat-spinner diameter="20"></mat-spinner>
+              } @else {
+                <mat-icon>lock</mat-icon>
+              }
+              Lock
+            </button>
+
+            <button mat-raised-button color="accent" (click)="sendCommand('restart')" [disabled]="commandLoading['restart']">
+              @if (commandLoading['restart']) {
+                <mat-spinner diameter="20"></mat-spinner>
+              } @else {
+                <mat-icon>restart_alt</mat-icon>
+              }
+              Restart
+            </button>
+
+            <button mat-raised-button color="warn" (click)="sendCommand('shutdown')" [disabled]="commandLoading['shutdown']">
+              @if (commandLoading['shutdown']) {
+                <mat-spinner diameter="20"></mat-spinner>
+              } @else {
+                <mat-icon>power_settings_new</mat-icon>
+              }
+              Shutdown
+            </button>
+          </div>
+
+          @if (commandMessage) {
+            <div class="command-message" [class.success]="commandMessageType === 'success'" [class.error]="commandMessageType === 'error'">
+              <mat-icon>{{ commandMessageType === 'success' ? 'check_circle' : 'error' }}</mat-icon>
+              <span>{{ commandMessage }}</span>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="no-warden">
+          <mat-icon class="no-warden-icon">link_off</mat-icon>
+          <h3>{{ 'admin.machineView.wardenNotConnected' | transloco }}</h3>
+          <p>{{ 'admin.machineView.wardenNotConnectedDesc' | transloco }}</p>
+        </div>
+      }
+    </div>
+  </mat-tab>
+
+  <!-- Info Tab -->
+  <mat-tab [label]="'admin.machineView.infoTab' | transloco">
+    <div class="tab-content">
+      @if (machine) {
+        <div class="info-section">
+          <div class="info-row">
+            <span class="info-label">{{ 'admin.machineView.name' | transloco }}</span>
+            <span class="info-value">{{ machine.name }}</span>
+          </div>
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <span class="info-label">{{ 'admin.machineView.type' | transloco }}</span>
+            <span class="info-value">{{ getMachineTypeLabel(machine.machine_type) }}</span>
+          </div>
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <span class="info-label">{{ 'admin.machineView.status' | transloco }}</span>
+            <mat-chip [class]="getStatusClass(machine.status)">{{ machine.status }}</mat-chip>
+          </div>
+          <mat-divider></mat-divider>
+
+          @if (machine.hardware_configuration) {
+            <div class="info-row">
+              <span class="info-label">{{ 'admin.machineView.hardwareConfig' | transloco }}</span>
+              <span class="info-value">{{ machine.hardware_configuration }}</span>
+            </div>
+            <mat-divider></mat-divider>
+          }
+
+          @if (machine.start_work_hours || machine.end_work_hours) {
+            <div class="info-row">
+              <span class="info-label">{{ 'admin.machineView.workingHours' | transloco }}</span>
+              <span class="info-value">{{ machine.start_work_hours || '–' }} - {{ machine.end_work_hours || '–' }}</span>
+            </div>
+            <mat-divider></mat-divider>
+          }
+
+          @if (machine.working_days && machine.working_days.length > 0) {
+            <div class="info-row">
+              <span class="info-label">{{ 'admin.machineView.workingDays' | transloco }}</span>
+              <div class="chips-container">
+                @for (day of machine.working_days; track day) {
+                  <mat-chip>{{ day }}</mat-chip>
+                }
+              </div>
+            </div>
+            <mat-divider></mat-divider>
+          }
+
+          <h3 class="section-title">{{ 'admin.machineView.wardenDetails' | transloco }}</h3>
+
+          <div class="info-row">
+            <span class="info-label">{{ 'admin.machineView.globalIp' | transloco }}</span>
+            <span class="info-value">{{ machine.warden_global_ip || '–' }}</span>
+          </div>
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <span class="info-label">{{ 'admin.machineView.localIp' | transloco }}</span>
+            <span class="info-value">{{ machine.warden_local_ip || '–' }}</span>
+          </div>
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <span class="info-label">{{ 'admin.machineView.callbackPort' | transloco }}</span>
+            <span class="info-value">{{ machine.warden_callback_port || '–' }}</span>
+          </div>
+          <mat-divider></mat-divider>
+
+          <div class="info-row">
+            <span class="info-label">{{ 'admin.machineView.callbackSecret' | transloco }}</span>
+            <span class="info-value secret-value">{{ machine.warden_callback_secret ? '••••••••' : '–' }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </mat-tab>
+</mat-tab-group>

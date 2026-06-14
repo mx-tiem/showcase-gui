@@ -1,0 +1,103 @@
+<div class="calendar-container">
+  <div class="calendar-back-row">
+    <button mat-icon-button routerLink="/admin/dashboard" class="back-button" [matTooltip]="'admin.backToDashboard' | transloco">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+  <div class="calendar-filters">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'admin.calendar.filterMachine' | transloco }}</mat-label>
+      <mat-select [value]="selectedMachineId()" (selectionChange)="onMachineChange($event.value)">
+        <mat-option [value]="null">{{ 'admin.calendar.allMachines' | transloco }}</mat-option>
+        <mat-option *ngFor="let machine of machines()" [value]="machine.id">
+          {{ machine.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'admin.calendar.searchUser' | transloco }}</mat-label>
+      <input 
+        matInput 
+        type="text" 
+        [(ngModel)]="userSearchTerm" 
+        (ngModelChange)="onUserSearch()"
+        [matAutocomplete]="auto"
+        [placeholder]="'admin.calendar.searchPlaceholder' | transloco">
+      <button *ngIf="userSearchTerm()" matSuffix mat-icon-button (click)="clearFilters()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectUser($event.option.value)">
+        <mat-option *ngFor="let user of filteredUsers" [value]="user">
+          {{ user.name }} ({{ user.email }})
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="clearFilters()" *ngIf="selectedMachineId() || selectedUserId()">
+      <mat-icon>clear_all</mat-icon>
+      {{ 'admin.calendar.clearFilters' | transloco }}
+    </button>
+  </div>
+
+  <div class="calendar-header">
+    <div class="calendar-nav">
+      <button mat-icon-button mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="onViewDateChange()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button mat-raised-button mwlCalendarToday [(viewDate)]="viewDate" (click)="onViewDateChange()">
+        <mat-icon>today</mat-icon>
+        {{ 'admin.calendar.today' | transloco }}
+      </button>
+      <button mat-icon-button mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="onViewDateChange()">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+    
+    <h2 class="calendar-title">{{ viewDate | calendarDate: view + 'ViewTitle' : 'en' }}</h2>
+    
+    <mat-button-toggle-group [value]="view" (change)="setView($event.value)">
+      <mat-button-toggle [value]="CalendarView.Month">
+        <mat-icon>calendar_view_month</mat-icon>
+        {{ 'admin.calendar.month' | transloco }}
+      </mat-button-toggle>
+      <mat-button-toggle [value]="CalendarView.Week">
+        <mat-icon>calendar_view_week</mat-icon>
+        {{ 'admin.calendar.week' | transloco }}
+      </mat-button-toggle>
+      <mat-button-toggle [value]="CalendarView.Day">
+        <mat-icon>calendar_view_day</mat-icon>
+        {{ 'admin.calendar.day' | transloco }}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <div class="calendar-content">
+    @switch (view) {
+      @case (CalendarView.Month) {
+        <mwl-calendar-month-view 
+          [viewDate]="viewDate" 
+          [events]="events()"
+          (eventClicked)="handleEventClick($event.event)" />
+      }
+      @case (CalendarView.Week) {
+        <mwl-calendar-week-view 
+          [viewDate]="viewDate" 
+          [events]="events()"
+          [hourSegments]="2"
+          [dayStartHour]="8"
+          [dayEndHour]="24"
+          (eventClicked)="handleEventClick($event.event)" />
+      }
+      @case (CalendarView.Day) {
+        <mwl-calendar-day-view 
+          [viewDate]="viewDate" 
+          [events]="events()"
+          [hourSegments]="2"
+          [dayStartHour]="8"
+          [dayEndHour]="24"
+          (eventClicked)="handleEventClick($event.event)" />
+      }
+    }
+  </div>
+</div>

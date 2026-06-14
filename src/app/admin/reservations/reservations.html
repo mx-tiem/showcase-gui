@@ -1,0 +1,16 @@
+<div class="reservations-container">
+  <app-admin-table
+    title="admin.reservations.title"
+    [columns]="columns"
+    [data]="reservations"
+    [totalItems]="totalReservations"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [loading]="loading"
+    [actions]="['view']"
+    (sortChange)="onSortChange($event)"
+    (pageChange)="onPageChange($event)"
+    (actionClick)="onActionClick($event)"
+    (createClick)="onCreateReservation()">
+  </app-admin-table>
+</div>

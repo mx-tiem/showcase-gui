@@ -1,0 +1,189 @@
+<div class="show-dialog-container">
+  <h2 mat-dialog-title>Reservation Details</h2>
+  <mat-dialog-content>
+    <!-- Start Time, End Time, and Status in same row -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <strong>Start Time:</strong> {{ formatDateTime(data.start_time) }}
+      </div>
+      <div class="col-md-4">
+        <strong>End Time:</strong> {{ formatDateTime(data.end_time) }}
+      </div>
+      <div class="col-md-4">
+        <strong>Status:</strong>
+        <span class="status-badge" [ngClass]="'status-' + data.status.toLowerCase()">{{ data.status }}</span>
+      </div>
+    </div>
+
+    <!-- Cards Row -->
+    <div class="row mb-3">
+      <!-- User Card -->
+      <div class="col-md-4 mb-3">
+        <h5>User</h5>
+        <mat-card class="user-info-card">
+          <mat-card-content>
+            <div class="user-name">{{ data.user.name }}</div>
+            <div class="user-email">{{ data.user.email }}</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Machine Card -->
+      <div class="col-md-4 mb-3">
+        <h5>Machine</h5>
+        <mat-card class="machine-info-card">
+          <mat-card-content>
+            <div class="machine-switch-row">
+              <mat-form-field appearance="outline" class="machine-select">
+                <mat-label>Machine</mat-label>
+                <mat-select [(value)]="selectedMachineId">
+                  <mat-option *ngFor="let machine of machines" [value]="machine.id">
+                    {{ machine.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="onSwitchMachine()"
+                [disabled]="switchingMachine || selectedMachineId === data.machine.id"
+                matTooltip="Switch machine">
+                <mat-icon>swap_horiz</mat-icon>
+              </button>
+            </div>
+            <div class="switch-success" *ngIf="switchSuccess">
+              <mat-icon>check_circle</mat-icon> {{ switchSuccess }}
+            </div>
+            <div class="switch-error" *ngIf="switchError">
+              <mat-icon>error</mat-icon> {{ switchError }}
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Creator Card -->
+      <div class="col-md-4 mb-3">
+        <h5>Creator</h5>
+        <mat-card class="creator-info-card">
+          <mat-card-content>
+            <div class="creator-name">{{ data.creator.name }}</div>
+            <div class="creator-email">{{ data.creator.email }}</div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Notes (if present) -->
+    <div class="row mb-3" *ngIf="data.notes">
+      <div class="col-12">
+        <strong>Notes:</strong> {{ data.notes }}
+      </div>
+    </div>
+
+    <!-- Status Change Buttons -->
+    <div class="row mb-3">
+      <div class="col-12">
+        <h5>Change Status</h5>
+        <div class="status-buttons">
+          <button
+            *ngFor="let status of availableStatuses"
+            mat-raised-button
+            [color]="getStatusColor(status)"
+            class="status-button"
+            (click)="onStatusChange(status)">
+            <mat-icon>{{ getStatusIcon(status) }}</mat-icon>
+            {{ status | titlecase }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Extend Reservation Panel (active reservations only) -->
+    <div class="row mb-3" *ngIf="isActive">
+      <div class="col-12">
+        <mat-accordion>
+          <mat-expansion-panel class="extend-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon class="extend-icon">more_time</mat-icon>
+                Extend Reservation
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div *ngIf="extendLoading" class="text-center py-3">Loading...</div>
+
+            <div *ngIf="!extendLoading && maxExtendHours > 0" class="extend-content">
+              <div class="extend-info-row">
+                <span class="extend-label">Current End</span>
+                <span class="extend-value">{{ currentEndTime }}</span>
+              </div>
+              <div class="extend-info-row">
+                <span class="extend-label">User Playhours</span>
+                <span class="extend-value">{{ availablePlayhours }}h</span>
+              </div>
+              <div class="extend-info-row">
+                <span class="extend-label">Max Extend</span>
+                <span class="extend-value">{{ maxExtendHours }}h</span>
+              </div>
+
+              <div class="extend-slider-section">
+                <div class="extend-input-row">
+                  <div class="extend-slider-label">
+                    Extend by:
+                    <input
+                      type="number"
+                      class="extend-input"
+                      [min]="0.5"
+                      [max]="maxExtendHours"
+                      [step]="0.5"
+                      [(ngModel)]="extendHours"
+                      (change)="onExtendHoursInput($any($event.target).value)"
+                    />h
+                  </div>
+                  <div class="new-end-time">
+                    <mat-icon>schedule</mat-icon>
+                    New end time: <strong>{{ getNewEndTime() }}</strong>
+                  </div>
+                </div>
+                <mat-slider
+                  [min]="0.5"
+                  [max]="maxExtendHours"
+                  [step]="0.5"
+                  discrete
+                  showTickMarks
+                  class="extend-slider">
+                  <input matSliderThumb [(ngModel)]="extendHours">
+                </mat-slider>
+              </div>
+
+              <div class="extend-actions">
+                <button mat-raised-button color="primary" class="extend-confirm-btn" (click)="onExtendConfirm(false)" [disabled]="extendLoading">
+                  <mat-icon>more_time</mat-icon>
+                  Extend by {{ extendHours }}h
+                </button>
+                <button mat-raised-button class="extend-free-btn" (click)="onExtendConfirm(true)" [disabled]="extendLoading || extendHours > maxExtendHoursFree">
+                  <mat-icon>card_giftcard</mat-icon>
+                  Free {{ extendHours }}h
+                </button>
+              </div>
+
+              <div class="extend-success" *ngIf="extendSuccess">
+                <mat-icon>check_circle</mat-icon>
+                {{ extendSuccess }}
+              </div>
+              <div class="extend-error" *ngIf="extendError">
+                <mat-icon>error</mat-icon>
+                {{ extendError }}
+              </div>
+            </div>
+
+            <div *ngIf="!extendLoading && maxExtendHours <= 0" class="no-extend">
+              <mat-icon>block</mat-icon>
+              <span>This reservation cannot be extended further.</span>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </mat-dialog-content>
+</div>

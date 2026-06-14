@@ -1,0 +1,118 @@
+.cta {
+  display: flex;
+  padding: 24px 60px;
+  text-decoration: none;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--mat-sys-on-primary-container);
+  background: var(--mat-sys-primary-container);
+  transition: 1s;
+  box-shadow: 6px 6px 0 var(--mat-sys-shadow, black);
+  transform: skewX(-15deg);
+  border: none;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:hover {
+    transition: 0.5s;
+    box-shadow: 10px 10px 0 var(--mat-sys-primary);
+
+    .second:not(.reverse-arrow) {
+      transition: 0.5s;
+      margin-right: 45px;
+    }
+
+    .second.reverse-arrow {
+      transition: 0.5s;
+      margin-left: 45px;
+    }
+
+    .three {
+      animation: color_anim 1s infinite 0.2s;
+    }
+
+    .one {
+      transform: translateX(0%);
+      animation: color_anim 1s infinite 0.6s;
+    }
+
+    .two {
+      transform: translateX(0%);
+      animation: color_anim 1s infinite 0.4s;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: 4px 4px 0 var(--mat-sys-shadow, black);
+
+    &:hover {
+      box-shadow: 4px 4px 0 var(--mat-sys-shadow, black);
+
+      .second:not(.reverse-arrow) {
+        margin-right: 0;
+      }
+
+      .second.reverse-arrow {
+        margin-left: 0;
+      }
+
+      .one, .two, .three {
+        animation: none;
+      }
+    }
+  }
+
+  &.reverse {
+    flex-direction: row;
+
+    .second.reverse-arrow {
+      transform: scaleX(-1);
+      margin-left: 0;
+      margin-right: 40px;
+    }
+  }
+
+  .second {
+    transition: 0.5s;
+    margin-right: 0px;
+  }
+}
+
+.span {
+  transform: skewX(15deg);
+}
+
+.second {
+  width: 30px;
+  margin-left: 40px;
+  position: relative;
+  top: 12%;
+}
+
+.one {
+  transition: 0.4s;
+  transform: translateX(-60%);
+}
+
+.two {
+  transition: 0.5s;
+  transform: translateX(-30%);
+}
+
+@keyframes color_anim {
+  0% {
+    fill: var(--mat-sys-on-primary-container);
+  }
+  50% {
+    fill: var(--mat-sys-primary);
+  }
+  100% {
+    fill: var(--mat-sys-on-primary-container);
+  }
+}

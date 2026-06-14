@@ -1,0 +1,73 @@
+<div class="user-notifications-container">
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>{{ 'admin.userNotifications.loading' | transloco }}</p>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-container">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-raised-button color="primary" (click)="loadNotifications()">
+      {{ 'common.retry' | transloco }}
+    </button>
+  </div>
+
+  <div *ngIf="!loading && !error" class="notifications-content">
+    <div *ngIf="notifications.length === 0 && !loading" class="empty-state">
+      <mat-icon>notifications_none</mat-icon>
+      <p>{{ 'admin.userNotifications.noNotifications' | transloco }}</p>
+    </div>
+
+    <div *ngIf="notifications.length > 0" class="table-container">
+      <table mat-table [dataSource]="notifications" class="notifications-table">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>{{ 'common.id' | transloco }}</th>
+          <td mat-cell *matCellDef="let notification">{{ notification.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="icon">
+          <th mat-header-cell *matHeaderCellDef>{{ 'admin.userNotifications.icon' | transloco }}</th>
+          <td mat-cell *matCellDef="let notification">
+            <mat-icon class="notification-icon">{{ notification.icon }}</mat-icon>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>{{ 'admin.userNotifications.titleCol' | transloco }}</th>
+          <td mat-cell *matCellDef="let notification">{{ notification.title }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="short_description">
+          <th mat-header-cell *matHeaderCellDef>{{ 'admin.userNotifications.description' | transloco }}</th>
+          <td mat-cell *matCellDef="let notification">{{ notification.short_description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="read">
+          <th mat-header-cell *matHeaderCellDef>{{ 'admin.userNotifications.status' | transloco }}</th>
+          <td mat-cell *matCellDef="let notification">
+            <span class="read-badge" [ngClass]="notification.read ? 'read' : 'unread'">
+              {{ notification.read ? 'Read' : 'Unread' }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="created_at">
+          <th mat-header-cell *matHeaderCellDef>{{ 'admin.userNotifications.createdAt' | transloco }}</th>
+          <td mat-cell *matCellDef="let notification">{{ formatDate(notification.created_at) }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator
+        [length]="totalNotifications"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [pageSizeOptions]="[5, 10, 25, 50]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </div>
+  </div>
+</div>

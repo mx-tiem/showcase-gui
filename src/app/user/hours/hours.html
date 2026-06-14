@@ -1,0 +1,97 @@
+<div class="hours-container">
+  <!-- Game Summary -->
+  <div class="game-summary-section" *ngIf="gameSummary.length > 0 || totalReservations > 0">
+    <h3 class="sub-title">
+      <mat-icon>sports_esports</mat-icon>
+      {{ 'user.hours.myGames' | transloco }}
+    </h3>
+    <div class="summary-grid">
+      <mat-card class="summary-card stats-card" appearance="outlined">
+        <mat-card-content>
+          <div class="summary-icon">
+            <mat-icon class="stats-icon">event_available</mat-icon>
+          </div>
+          <div class="summary-info">
+            <div class="summary-name">{{ 'user.hours.totalReservations' | transloco }}</div>
+            <div class="summary-time">{{ totalReservations }}</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngFor="let game of gameSummary" class="summary-card" appearance="outlined">
+        <mat-card-content>
+          <div class="summary-icon">
+            <img *ngIf="game.logo_url" [src]="game.logo_url" [alt]="game.game_name" class="summary-logo">
+            <mat-icon *ngIf="!game.logo_url" class="summary-placeholder">sports_esports</mat-icon>
+          </div>
+          <div class="summary-info">
+            <div class="summary-name">{{ game.game_name }}</div>
+            <div class="summary-time">{{ formatTotalTime(game.total_minutes) }}</div>
+            <div class="summary-sessions">{{ game.session_count }} {{ game.session_count === 1 ? ('user.hours.session' | transloco) : ('user.hours.sessions' | transloco) }}</div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2 class="section-title">
+      <mat-icon>schedule</mat-icon>
+      {{ 'user.hours.buyHours' | transloco }}
+    </h2>
+    <div class="discount-breakdown" *ngIf="hasDiscount">
+      <mat-icon>local_offer</mat-icon>
+      <span class="discount-tag" *ngIf="discountPlay > 0">{{ 'user.hours.play' | transloco }} {{ discountPlay }}%</span>
+      <span class="discount-tag" *ngIf="discountAdmin > 0">{{ 'user.hours.admin' | transloco }} {{ discountAdmin }}%</span>
+    </div>
+  </div>
+
+  <!-- Discount Banner -->
+  <div class="discount-banner" *ngIf="hasDiscount">
+    <mat-icon>local_offer</mat-icon>
+    <span>{{ 'user.hours.discountBanner' | transloco:{ discount: discount } }}</span>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+    <p>{{ 'user.hours.loadingPrices' | transloco }}</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="loadError && !isLoading" class="error-state">
+    <mat-icon class="error-icon">error</mat-icon>
+    <p>{{ loadError }}</p>
+  </div>
+
+  <!-- Prices Grid -->
+  <div class="row g-3 justify-content-center" *ngIf="!isLoading && !loadError && prices.length > 0">
+    <div class="col-6 col-lg-3" *ngFor="let price of prices">
+      <mat-card class="price-card">
+        <mat-card-content class="price-content">
+          <div class="hours-amount">
+            <span class="amount">{{ price.amount }}</span>
+            <span class="label">{{ 'user.hours.hours' | transloco }}</span>
+          </div>
+
+          <div class="price-value">
+            <div class="main-price" [class.has-discount]="price.discounted_price !== null">
+              <span class="original" [class.strikethrough]="price.discounted_price !== null">{{ price.price }} {{ price.currency }}</span>
+              <span class="discounted" *ngIf="price.discounted_price !== null">{{ price.discounted_price }} {{ price.currency }}</span>
+            </div>
+            <div class="avg-price">
+              <span [class.strikethrough]="price.discounted_price !== null">{{ avgPrice(price) }}</span>
+              <span *ngIf="avgDiscountedPrice(price) !== null"> → {{ avgDiscountedPrice(price) }}</span>
+              <span> {{ price.currency }}/h</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && !loadError && prices.length === 0" class="empty-state">
+    <mat-icon class="empty-icon">money_off</mat-icon>
+    <p>{{ 'user.hours.noPrices' | transloco }}</p>
+  </div>
+</div>

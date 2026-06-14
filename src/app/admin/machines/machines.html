@@ -1,0 +1,15 @@
+<div class="machines-container">
+  <app-admin-table
+    title="admin.machines.title"
+    [columns]="columns"
+    [data]="machines"
+    [totalItems]="totalMachines"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [loading]="loading"
+    (sortChange)="onSortChange($event)"
+    (pageChange)="onPageChange($event)"
+    (actionClick)="onActionClick($event)"
+    (createClick)="onCreateMachine()">
+  </app-admin-table>
+</div>
