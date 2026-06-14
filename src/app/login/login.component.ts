@@ -55,9 +55,9 @@ export class LoginComponent {
       loginObs.subscribe(
         userResponse => {
           console.log("setTimeout: ", this.loginService.user.value)
-          window.location.reload();
           this.isLoading = false;
-          this.hasError = false
+          this.hasError = false;
+          this.router.navigate(['/home']);
         }, errorMessage => {
           this.error = errorMessage;
           this.hasError = true;
