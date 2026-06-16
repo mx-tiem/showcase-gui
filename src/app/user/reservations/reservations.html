@@ -18,15 +18,15 @@
         (click)="switchView()">
       </app-square-button>
       <app-square-button
-        *ngIf="currentView === 'wizard' && wizard?.canGoBack"
+        *ngIf="currentView === 'wizard' && wizard.canGoBack"
         [label]="'common.back' | transloco"
         [reverse]="true"
         (click)="wizard.goBack()">
       </app-square-button>
       <app-square-button
-        *ngIf="currentView === 'wizard' && wizard?.canGoNext"
+        *ngIf="currentView === 'wizard' && wizard.canGoNext"
         [label]="'user.wizard.next' | transloco"
-        [disabled]="!wizard?.canGoNext"
+        [disabled]="!wizard.canGoNext"
         (click)="wizard.goNext()">
       </app-square-button>
     </div>
