@@ -8,7 +8,8 @@
     </div>
   </div>
 
-  <nav class="navigation-controls mb-3">
+  <!-- Desktop nav (hidden on mobile) -->
+  <nav class="navigation-controls mb-3 d-none d-md-flex">
     <button mat-icon-button [class.active]="activeRoute === 'home'" (click)="rollToFace('home')" [title]="'nav.home' | transloco"><mat-icon>home</mat-icon></button>
     <button mat-icon-button [class.active]="activeRoute === 'reservations'" (click)="rollToFace('reservations')" [title]="'nav.reservations' | transloco"><mat-icon>event_available</mat-icon></button>
     <button mat-icon-button [class.active]="activeRoute === 'events'" (click)="rollToFace('events')" [title]="'nav.events' | transloco"><mat-icon>event</mat-icon></button>
@@ -70,4 +71,91 @@
       </button>
     </mat-menu>
   </nav>
+
+  <!-- Mobile nav (visible only on mobile) -->
+  <div class="mobile-nav d-md-none">
+    <!-- Expanded nav panel: 2 rows of icons -->
+    <div class="mobile-nav-panel" [class.open]="mobileNavOpen()">
+      <div class="mobile-nav-grid row justify-content-center g-2">
+        <div class="col-3 d-flex justify-content-center">
+          <button mat-icon-button [class.active]="activeRoute === 'home'" (click)="rollToFace('home'); toggleMobileNav()" [title]="'nav.home' | transloco"><mat-icon>home</mat-icon></button>
+        </div>
+        <div class="col-3 d-flex justify-content-center">
+          <button mat-icon-button [class.active]="activeRoute === 'reservations'" (click)="rollToFace('reservations'); toggleMobileNav()" [title]="'nav.reservations' | transloco"><mat-icon>event_available</mat-icon></button>
+        </div>
+        <div class="col-3 d-flex justify-content-center">
+          <button mat-icon-button [class.active]="activeRoute === 'events'" (click)="rollToFace('events'); toggleMobileNav()" [title]="'nav.events' | transloco"><mat-icon>event</mat-icon></button>
+        </div>
+        <div class="col-3 d-flex justify-content-center">
+          <button mat-icon-button [class.active]="activeRoute === 'friends'" (click)="rollToFace('friends'); toggleMobileNav()" [title]="'nav.friends' | transloco"><mat-icon>people</mat-icon></button>
+        </div>
+        <div class="col-3 d-flex justify-content-center">
+          <button mat-icon-button [class.active]="activeRoute === 'hours'" (click)="rollToFace('hours'); toggleMobileNav()" [title]="'nav.hours' | transloco"><mat-icon>schedule</mat-icon></button>
+        </div>
+        <!-- Account with dropup -->
+        <div class="col-3 d-flex justify-content-center">
+          <button mat-icon-button
+            [class.active]="activeRoute === 'settings'"
+            [matMenuTriggerFor]="mobileAccountDropup"
+            [title]="'nav.account' | transloco">
+            <mat-icon>account_circle</mat-icon>
+          </button>
+        </div>
+        <!-- Notifications with dropup -->
+        <div class="col-3 d-flex justify-content-center">
+          <button mat-icon-button
+            [matMenuTriggerFor]="mobileNotificationDropup"
+            (menuOpened)="onNotificationMenuOpened()"
+            [title]="'nav.notifications' | transloco"
+            class="notification-circle-btn">
+            <mat-icon [matBadge]="unreadCount()" [matBadgeHidden]="unreadCount() === 0" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hamburger toggle button -->
+    <button class="mobile-nav-hamburger" (click)="toggleMobileNav()" [title]="'nav.menu' | transloco">
+      <mat-icon>{{ mobileNavOpen() ? 'close' : 'menu' }}</mat-icon>
+    </button>
+
+    <!-- Shared menus for mobile -->
+    <mat-menu #mobileAccountDropup="matMenu" class="account-dropup" yPosition="above" xPosition="before">
+      <div class="dropdown-header" (click)="$event.stopPropagation()">
+        <mat-icon class="user-avatar-icon">account_circle</mat-icon>
+        <span class="dropdown-title">{{ userName() }}</span>
+      </div>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="rollToFace('settings'); toggleMobileNav()">
+        <mat-icon>settings</mat-icon>
+        <span>{{ 'toolbar.settings' | transloco }}</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="onLogout()" class="logout-item">
+        <mat-icon>logout</mat-icon>
+        <span>{{ 'toolbar.logout' | transloco }}</span>
+      </button>
+    </mat-menu>
+
+    <mat-menu #mobileNotificationDropup="matMenu" class="notification-dropup" yPosition="above" xPosition="before">
+      <div class="dropdown-header" (click)="$event.stopPropagation()">
+        <span class="dropdown-title">{{ 'toolbar.notifications' | transloco }}</span>
+      </div>
+      <mat-divider></mat-divider>
+      <button mat-menu-item *ngFor="let notification of notifications()" class="notification-item">
+        <mat-icon [class.unread]="!notification.read">{{ notification.icon }}</mat-icon>
+        <div class="notification-content">
+          <span class="notification-message" [class.unread]="!notification.read">{{ notification.short_description }}</span>
+          <span class="notification-time">{{ notification.title }}</span>
+        </div>
+      </button>
+      <mat-divider *ngIf="notifications().length > 0"></mat-divider>
+      <button mat-menu-item *ngIf="notifications().length > 0" class="view-all-btn" (click)="onViewAllNotifications()">
+        <span class="view-all-text">{{ 'toolbar.viewAll' | transloco }}</span>
+      </button>
+      <button mat-menu-item *ngIf="notifications().length === 0" disabled>
+        <span>{{ 'toolbar.noNotifications' | transloco }}</span>
+      </button>
+    </mat-menu>
+  </div>
 </div>

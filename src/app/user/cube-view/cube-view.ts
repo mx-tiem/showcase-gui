@@ -85,6 +85,7 @@ export class CubeView implements AfterViewInit, OnDestroy {
   notifications = signal<Notification[]>([]);
   unreadCount = signal(0);
   userName = signal<string>('');
+  mobileNavOpen = signal(false);
   private userSub?: Subscription;
   private routerSub?: Subscription;
 
@@ -1163,6 +1164,10 @@ export class CubeView implements AfterViewInit, OnDestroy {
         this.unreadCount.set(0);
       }
     });
+  }
+
+  toggleMobileNav(): void {
+    this.mobileNavOpen.update(v => !v);
   }
 
   // === Account methods ===
