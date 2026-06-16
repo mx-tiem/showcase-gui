@@ -52,6 +52,12 @@
       transition: transform 0.15s ease;
     }
   }
+
+  @media (max-width: 767.98px) {
+    .logo-image {
+      width: 80px;
+    }
+  }
 }
 
 .navigation-controls {

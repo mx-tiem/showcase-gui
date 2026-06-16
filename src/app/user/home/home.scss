@@ -18,6 +18,10 @@
   position: relative;
   padding: 0;
   pointer-events: auto;
+
+  @media (max-width: 767.98px) {
+    padding-top: 100px;
+  }
 }
 
 // Bootstrap row constraint - prevent negative margin overflow
@@ -70,6 +74,30 @@
       font-weight: 700;
       color: var(--mat-sys-primary);
       line-height: 1;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .playhours-card {
+      width: 100%;
+      padding: 6px 12px;
+
+      mat-card-content {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: nowrap;
+      }
+
+      .playhours-label {
+        font-size: 0.85rem;
+      }
+
+      .playhours-value {
+        font-size: 1rem;
+        line-height: 1.2;
+      }
     }
   }
 
