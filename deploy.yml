@@ -1,0 +1,23 @@
+# Name of your application. Used to uniquely configure containers.
+service: dojo_gui
+
+# Name of the container image.
+image: dojo_gui
+
+# Deploy to these servers.
+servers:
+  web:
+    - 172.245.88.251
+
+# Enable SSL auto certification via Let's Encrypt.
+proxy:
+  ssl: true
+  host: www.tiem-showcase.site
+
+# Where you keep your container images.
+registry:
+  server: localhost:5555
+
+# Configure the image builder.
+builder:
+  arch: amd64
