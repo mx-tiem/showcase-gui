@@ -1,8 +1,5 @@
 .session-type-selection {
-  display: flex;
-  gap: 24px;
-  justify-content: center;
-  padding: 40px 0;
+  padding: 24px 0;
 
   .session-type-btn {
     display: flex;
@@ -97,6 +94,35 @@
     mat-stepper {
       flex: 1;
       background: transparent;
+    }
+
+    @media (max-width: 767.98px) {
+      padding: 8px;
+
+      ::ng-deep .mat-horizontal-stepper-header-container {
+        display: none;
+      }
+
+      .mobile-step-indicator {
+        .step-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: var(--mat-sys-outline-variant);
+          transition: all 0.2s ease;
+
+          &.step-dot-active {
+            width: 24px;
+            border-radius: 5px;
+            background: var(--mat-sys-primary);
+          }
+
+          &.step-dot-done {
+            background: var(--mat-sys-primary);
+            opacity: 0.4;
+          }
+        }
+      }
     }
   }
 }
@@ -200,27 +226,9 @@
             border-collapse: collapse;
           }
 
-          table tbody {
-            display: flex;
-            flex-direction: column;
-
-            tr {
-              display: table;
-              width: 80%;
-              table-layout: fixed;
-            }
-
-            tr:first-child {
-              order: 3;
-            }
-
-            tr:nth-child(2) {
-              order: 2;
-            }
-
-            tr:last-child {
-              order: 1;
-            }
+          td {
+            text-align: center;
+            vertical-align: middle;
           }
 
           .bs-timepicker-field {
@@ -243,25 +251,33 @@
             font-size: 3.5rem;
             color: var(--mat-sys-primary);
             padding: 8px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
           }
 
           .bs-chevron {
             width: 30px;
             height: 30px;
             border-width: 6px 6px 0 0;
+            position: relative;
+            top: 0;
+            left: 0;
           }
 
           .bs-chevron-up {
-            transform: rotate(135deg);
-          }
-
-          .bs-chevron-down {
             transform: rotate(-45deg);
           }
 
-          td:not(.bs-timepicker-field) {
+          .bs-chevron-down {
+            transform: rotate(135deg);
+          }
+
+          td.separator {
             font-size: 4rem;
             color: var(--mat-sys-on-surface-variant);
+            padding: 0 8px;
           }
         }
       }
@@ -310,6 +326,73 @@
 
           .info-card-content .info-card-value {
             color: var(--mat-sys-on-primary-container);
+          }
+        }
+      }
+
+      @media (max-width: 767.98px) {
+        gap: 16px;
+
+        .time-picker-group {
+          ::ng-deep timepicker {
+            display: block;
+            width: 100%;
+
+            table {
+              width: 100%;
+              table-layout: fixed;
+            }
+
+            td:nth-child(1),
+            td:nth-child(3) {
+              width: 45%;
+            }
+
+            td:nth-child(2) {
+              width: 10%;
+              font-size: 2.5rem;
+              padding: 0 4px;
+            }
+
+            .bs-timepicker-field {
+              width: 100%;
+              height: 80px;
+              font-size: 2.5rem;
+              border-radius: 10px;
+            }
+
+            .btn-link {
+              font-size: 2rem;
+              padding: 4px 0;
+            }
+
+            .bs-chevron {
+              width: 20px;
+              height: 20px;
+              border-width: 4px 4px 0 0;
+            }
+          }
+        }
+
+        .info-card {
+          min-width: unset;
+          padding: 12px;
+          gap: 8px;
+
+          mat-icon {
+            font-size: 22px;
+            width: 22px;
+            height: 22px;
+          }
+
+          .info-card-content {
+            .info-card-value {
+              font-size: 1.3rem;
+            }
+
+            .info-card-label {
+              font-size: 0.75rem;
+            }
           }
         }
       }
@@ -523,6 +606,48 @@
           padding: 12px 16px;
         }
       }
+
+      @media (max-width: 767.98px) {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding-bottom: 4px;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
+
+        .date-card-wrapper {
+          padding-bottom: 4px;
+        }
+
+        .date-card {
+          padding: 8px 14px;
+          border-radius: 999px;
+          flex-direction: row;
+          gap: 6px;
+          white-space: nowrap;
+          width: auto;
+
+          .date-card-slots,
+          .date-card-range {
+            display: none;
+          }
+
+          .date-card-date {
+            font-size: 0.85rem;
+          }
+        }
+
+        .date-card.date-card-selected {
+          padding: 8px 14px;
+        }
+
+        .date-card.date-card-original:not(.date-card-selected) {
+          padding: 6px 12px;
+        }
+      }
     }
 
     .date-tab-content {
@@ -531,9 +656,6 @@
   }
 
   .reservations-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
     padding: 16px 0;
   }
 

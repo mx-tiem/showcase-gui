@@ -1,7 +1,8 @@
 <div class="reservations-container">
   <!-- Header Row -->
-  <div class="header-row row g-0 mt-5 mb-5">
-    <div class="col-4 d-flex align-items-center justify-content-end">
+  <div class="header-row row g-0 mt-1 mt-md-5 mb-5">
+    <!-- Playhours card - col-10 centered on mobile, 4 cols on desktop -->
+    <div class="col-10 offset-1 col-md-4 offset-md-0 d-flex align-items-center justify-content-center justify-content-md-end mb-3 mb-md-0">
       <mat-card class="playhours-card">
         <mat-card-content>
           <span class="playhours-label">{{ 'user.reservations.youHave' | transloco }}</span>
@@ -10,8 +11,10 @@
         </mat-card-content>
       </mat-card>
     </div>
-    <div class="col-4"></div>
-    <div class="col-4 d-flex align-items-center justify-content-start gap-3">
+    <!-- Empty middle columns - hidden on mobile -->
+    <div class="d-none d-md-block col-md-4"></div>
+    <!-- Buttons - col-10 centered on mobile, 4 cols on desktop -->
+    <div class="col-10 offset-1 col-md-4 offset-md-0 d-flex align-items-center justify-content-center justify-content-md-start gap-3">
       <app-square-button
         *ngIf="currentView === 'index'"
         [label]="'user.reservations.newReservation' | transloco"

@@ -3,19 +3,30 @@
     <div class="wizard-dialog col-12 col-md-8">
 
       <div class="wizard-content">
+        <!-- Mobile step progress dots (hidden on desktop) -->
+        <div class="mobile-step-indicator d-flex d-md-none justify-content-center align-items-center gap-2 mb-3">
+          <span class="step-dot" [class.step-dot-done]="stepper.selectedIndex > 0" [class.step-dot-active]="stepper.selectedIndex === 0"></span>
+          <span class="step-dot" [class.step-dot-done]="stepper.selectedIndex > 1" [class.step-dot-active]="stepper.selectedIndex === 1"></span>
+          <span class="step-dot" [class.step-dot-done]="stepper.selectedIndex > 2" [class.step-dot-active]="stepper.selectedIndex === 2"></span>
+          <span class="step-dot" [class.step-dot-active]="stepper.selectedIndex === 3"></span>
+        </div>
         <mat-stepper #stepper linear>
           <!-- Step 1: Session Type -->
           <mat-step [stepControl]="sessionTypeForm" [label]="'user.wizard.sessionType' | transloco">
             <div class="step-content">
-              <div class="session-type-selection">
-                <button class="session-type-btn" [class.active]="sessionType === 'solo'" (click)="selectSessionType('solo', stepper)" type="button">
-                  <mat-icon>person</mat-icon>
-                  <span>{{ 'user.wizard.soloSession' | transloco }}</span>
-                </button>
-                <button class="session-type-btn" [class.active]="sessionType === 'friends'" (click)="selectSessionType('friends', stepper)" type="button">
-                  <mat-icon>group</mat-icon>
-                  <span>{{ 'user.wizard.withFriends' | transloco }}</span>
-                </button>
+              <div class="session-type-selection row g-3 justify-content-center">
+                <div class="col-12 col-md-auto d-flex justify-content-center">
+                  <button class="session-type-btn w-100" [class.active]="sessionType === 'solo'" (click)="selectSessionType('solo', stepper)" type="button">
+                    <mat-icon>person</mat-icon>
+                    <span>{{ 'user.wizard.soloSession' | transloco }}</span>
+                  </button>
+                </div>
+                <div class="col-12 col-md-auto d-flex justify-content-center">
+                  <button class="session-type-btn w-100" [class.active]="sessionType === 'friends'" (click)="selectSessionType('friends', stepper)" type="button">
+                    <mat-icon>group</mat-icon>
+                    <span>{{ 'user.wizard.withFriends' | transloco }}</span>
+                  </button>
+                </div>
               </div>
 
               <mat-expansion-panel *ngIf="showFriendsPanel" [expanded]="showFriendsPanel" class="friends-expansion-panel" hideToggle>
@@ -90,51 +101,88 @@
                     </mat-calendar>
                   </div>
 
-                  <div class="col-12 col-md-6 d-flex justify-content-end align-items-center">
+                  <div class="col-12 col-md-6">
                     <div class="time-duration-column">
-                      <div class="time-row">
-                        <div class="time-picker-group">
-                          <label class="time-label">{{ 'user.wizard.startTime' | transloco }}</label>
-                          <timepicker
-                            formControlName="startTime"
-                            [showMeridian]="false"
-                            [minuteStep]="15"
-                            (ngModelChange)="onStartTimeChange()">
-                          </timepicker>
+
+                      <!-- Start time row -->
+                      <div class="row align-items-center gx-3 mb-3">
+                        <div class="col-12 col-md-auto">
+                          <div class="time-picker-group">
+                            <label class="time-label">{{ 'user.wizard.startTime' | transloco }}</label>
+                            <timepicker
+                              formControlName="startTime"
+                              [showMeridian]="false"
+                              [minuteStep]="15"
+                              (ngModelChange)="onStartTimeChange()">
+                            </timepicker>
+                          </div>
                         </div>
-                        <div class="info-card" *ngIf="currentUser">
-                          <mat-icon>schedule</mat-icon>
-                          <div class="info-card-content">
-                            <span class="info-card-label">{{ 'user.wizard.availableHours' | transloco }}</span>
-                            <span class="info-card-value">{{ formatHours(currentUser.available_playhours || 0) }}</span>
+                        <!-- Available hours card: desktop only, inline next to start time -->
+                        <div class="col-md-auto d-none d-md-flex align-items-center" *ngIf="currentUser">
+                          <div class="info-card">
+                            <mat-icon>schedule</mat-icon>
+                            <div class="info-card-content">
+                              <span class="info-card-label">{{ 'user.wizard.availableHours' | transloco }}</span>
+                              <span class="info-card-value">{{ formatHours(currentUser.available_playhours || 0) }}</span>
+                            </div>
                           </div>
                         </div>
                       </div>
 
-                      <div class="insufficient-hours-banner" *ngIf="shouldShowInsufficientHoursError()">
+                      <!-- Mobile only: both info cards side by side between the two time pickers -->
+                      <div class="row g-2 d-flex d-md-none mb-3">
+                        <div class="col-6" *ngIf="currentUser">
+                          <div class="info-card h-100">
+                            <mat-icon>schedule</mat-icon>
+                            <div class="info-card-content">
+                              <span class="info-card-label">{{ 'user.wizard.availableHours' | transloco }}</span>
+                              <span class="info-card-value">{{ formatHours(currentUser.available_playhours || 0) }}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="info-card h-100" [class.info-card-active]="calculatedDuration">
+                            <mat-icon>timelapse</mat-icon>
+                            <div class="info-card-content">
+                              <span class="info-card-label">{{ 'user.wizard.duration' | transloco }}</span>
+                              <span class="info-card-value">{{ formattedTotalDuration || '-' }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Insufficient hours banner -->
+                      <div class="insufficient-hours-banner mb-3" *ngIf="shouldShowInsufficientHoursError()">
                         <mat-icon>error_outline</mat-icon>
                         <span>{{ 'user.wizard.insufficientHoursDetail' | transloco: { required: formatHours(requiredHours || 0), available: formatHours(currentUser?.available_playhours || 0) } }}</span>
                       </div>
 
-                      <div class="time-row">
-                        <div class="time-picker-group">
-                          <label class="time-label">{{ 'user.wizard.endTime' | transloco }}</label>
-                          <timepicker
-                            formControlName="endTime"
-                            [showMeridian]="false"
-                            [minuteStep]="15"
-                            [min]="basicInfoForm.get('startTime')?.value"
-                            (ngModelChange)="onEndTimeChange()">
-                          </timepicker>
+                      <!-- End time row -->
+                      <div class="row align-items-center gx-3">
+                        <div class="col-12 col-md-auto">
+                          <div class="time-picker-group">
+                            <label class="time-label">{{ 'user.wizard.endTime' | transloco }}</label>
+                            <timepicker
+                              formControlName="endTime"
+                              [showMeridian]="false"
+                              [minuteStep]="15"
+                              [min]="basicInfoForm.get('startTime')?.value"
+                              (ngModelChange)="onEndTimeChange()">
+                            </timepicker>
+                          </div>
                         </div>
-                        <div class="info-card" [class.info-card-active]="calculatedDuration">
-                          <mat-icon>timelapse</mat-icon>
-                          <div class="info-card-content">
-                            <span class="info-card-label">{{ 'user.wizard.duration' | transloco }}</span>
-                            <span class="info-card-value">{{ formattedTotalDuration || '-' }}</span>
+                        <!-- Duration card: desktop only, inline next to end time -->
+                        <div class="col-md-auto d-none d-md-flex align-items-center">
+                          <div class="info-card" [class.info-card-active]="calculatedDuration">
+                            <mat-icon>timelapse</mat-icon>
+                            <div class="info-card-content">
+                              <span class="info-card-label">{{ 'user.wizard.duration' | transloco }}</span>
+                              <span class="info-card-value">{{ formattedTotalDuration || '-' }}</span>
+                            </div>
                           </div>
                         </div>
                       </div>
+
                     </div>
                   </div>
                 </div>
@@ -152,10 +200,10 @@
               </div>
 
               <div *ngIf="availabilityData.length > 0" class="date-slots-container">
-                <div class="date-cards-row row">
+                <div class="date-cards-row row flex-nowrap flex-md-wrap overflow-auto overflow-md-visible">
                   <div
                     *ngFor="let dayData of availabilityData; let i = index"
-                    class="col date-card-wrapper">
+                    class="col-auto col-md date-card-wrapper">
                     <div
                       class="date-card"
                       [class.date-card-selected]="selectedDateIndex === i"
@@ -172,8 +220,9 @@
 
                 <div class="date-tab-content">
                   <ng-container *ngFor="let dayData of availabilityData; let i = index">
-                    <div *ngIf="selectedDateIndex === i" @tabSlide class="reservations-grid">
-                      <mat-card *ngFor="let reservation of dayData.available_reservations" class="reservation-card" [class.reservation-card-alt]="!dayData.original_date" [class.reservation-card-highlighted]="dayData.original_date && reservation.start_time === highlightedSlotTime">
+                    <div *ngIf="selectedDateIndex === i" @tabSlide class="reservations-grid row g-2 g-md-3">
+                      <div *ngFor="let reservation of dayData.available_reservations" class="col-12 col-md-4">
+                      <mat-card class="reservation-card h-100" [class.reservation-card-alt]="!dayData.original_date" [class.reservation-card-highlighted]="dayData.original_date && reservation.start_time === highlightedSlotTime">
                         <span *ngIf="dayData.original_date && reservation.start_time === highlightedSlotTime" class="highlighted-star">★</span>
                         <mat-card-header>
                           <mat-card-title>
@@ -202,6 +251,7 @@
                           </button>
                         </mat-card-actions>
                       </mat-card>
+                      </div>
                     </div>
                   </ng-container>
                 </div>
